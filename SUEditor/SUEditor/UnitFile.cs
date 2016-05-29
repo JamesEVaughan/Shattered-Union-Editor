@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace SUEditor
 {
@@ -33,6 +34,19 @@ namespace SUEditor
         {
             fileLocation = "";
             isLocal = true;
+
+            using (BinaryReader br = new BinaryReader(File.OpenRead(fileName)))
+            {
+                int temp;
+                temp = br.ReadInt32();
+                if (temp != 8)
+                {
+                    unitCount = 0;
+                    return;
+                }
+
+                unitCount = br.ReadInt32();
+            }
         }
     }
 }
