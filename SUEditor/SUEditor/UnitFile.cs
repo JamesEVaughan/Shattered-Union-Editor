@@ -13,77 +13,108 @@ namespace SUEditor
     /// </summary>
     class UnitFile
     {
-        // The name of the file this class will manipulate.
+        // Constants
+        private const int MAGIC_NUMBER = 0x08;  // The magic number for UnitFile.dat
 
         // Fields
         private bool isLocal;           // Is UnitTypes.dat local
         private string fileLocation;    // The location of the UnitTypes.dat
         private string fileName;        // The name of the file to be edited
-        private int unitCount;          // Number of units in the file
+        private UnitList unitDir;       // A list of all the units in the file
+
+        // Properties
+        public int UnitCount { get; set; } // Number of units in the file
+        public UnitList UnitDir => unitDir;
+        
 
         // Constructors
-        /* Functionality to be added later
-        public UnitFile(string loc)
+        public UnitFile(string fn) : 
+            this(fn, "")
         {
+            isLocal = true;
+        }
+
+        public UnitFile(string fn, string loc)
+        {
+            fileName = fn;
             fileLocation = loc;
             isLocal = false;
-        }
-        */
-
-        public UnitFile()
-        {
-            fileLocation = "";
-            fileName = "";
-            isLocal = false;
-            unitCount = -1;
+            UnitCount = 0;
+            unitDir = new UnitList();
         }
 
-        public void setFile(string fn)
+        public UnitFile() :
+            this("", "")
         {
-            try
+
+        }
+
+        /// <summary>
+        /// This method handles the final intialization of UnitFile by confirming that
+        /// the file pointed to by fileName & fileLocation is correctly formatted. Throws
+        /// SUE_InvalidFileException if file check fails.
+        /// </summary>
+        public void init()
+        {
+            /// This method handles the final intialization of UnitFile by confirming that
+            /// the file pointed to by fileName & fileLocation is correctly formatted. Throws
+            /// SUE_InvalidFileException if file check fails.
+
+            // First, simple sanity checks
+            if (fileName == "")
             {
-                using (BinaryReader reader = new BinaryReader(File.OpenRead(fn), Encoding.UTF8))
+                // We've gotta have a file to open...
+                throw new SUE_InvalidFileException("No file name and/or path given.");
+            }
+
+            if (UnitCount > 0)
+            {
+                // We've already done this, dude.
+                return;
+            }
+
+            using (BinaryReader reader = new BinaryReader(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Read)))
+            {
+                try
                 {
-                    // Confirm the 2 int header, first is 8...
-                    if (reader.ReadInt32() == 8)
+                    int temp = reader.ReadInt32();
+                    if (temp != MAGIC_NUMBER)
                     {
-                        // ... second is the number of entries
-                        unitCount = reader.ReadInt32();
+                        // This is the wrong file
+                        throw new SUE_InvalidFileException("Invalid UnitFile.dat");
+                    }
+                    UnitCount = reader.ReadInt32();
+
+                    // Now that we know how many units are here, we should check the size
+                    temp = (UnitCount * 145) + 8;   // File has an 8-byte header and 145 bytes per unit
+                    if (reader.BaseStream.Length != temp)
+                    {
+                        // The file is not the right size
+                        throw new SUE_InvalidFileException("Invalid UnitFile.dat");
+                    }
+
+                    // Finally, build the UnitDir
+                    Types.Name tempName;
+                    byte[] tempBytes = new byte[29];
+                    long tempUnitInd;
+                    for (int i = 0; i < UnitCount; i++)
+                    {
+                        // Pull the index from the position of the reader
+                        tempUnitInd = reader.BaseStream.Position;
+                        // Read the name from the file
+                        tempBytes = reader.ReadBytes(Types.Name.Size());
+                        // Convert the byte array to a Name
+                        tempName = new Types.Name(System.Text.Encoding.ASCII.GetString(tempBytes));
+                        unitDir.addNode(tempName, tempUnitInd);
+                        reader.BaseStream.Seek(116, SeekOrigin.Current);
                     }
                 }
-            }
-            catch
-            {
-            }
-        }
 
-        public string[] getUnitNames()
-        {
-            string[] names = new string[unitCount];
-            int curPos = 0x91;
-
-            using (BinaryReader reader = new BinaryReader(File.OpenRead(fileName), Encoding.UTF8))
-            {
-                // First, offset the header
-                reader.BaseStream.Seek(0x8, SeekOrigin.Begin);
-                for (int i = 0; i < unitCount; i++)
+                catch
                 {
-                    // Sanity check!
-                    if ((reader.BaseStream.Position + 0x91) > reader.BaseStream.Length)
-                        return null;
-                    reader.BaseStream.Seek(0x91, SeekOrigin.Current);
-                    names[i] = reader.ReadString();
-                    // Reset the position!
-                    reader.BaseStream.Seek(-names[i].Length, SeekOrigin.Current);
+
                 }
             }
-
-            return names;
-        }
-
-        public int showUnitCount()
-        {
-            return unitCount;
         }
     }
 }

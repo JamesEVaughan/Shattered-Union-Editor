@@ -14,13 +14,25 @@ namespace SUEditor
     {
         static int Main(string[] args)
         {
-            UnitFile theFile = new UnitFile();
+            UnitFile theFile;
             string fName = "UnitTypes.dat";
             string[] theNames;
-            // Try setting the file
-            theFile.setFile(fName);
 
-            Console.Out.WriteLine(theFile.showUnitCount());
+            // Try building it with the file name provided
+            theFile = new UnitFile(fName);
+
+            // Try initializing it
+            try
+            {
+                theFile.init();
+                Console.Out.WriteLine("The file was read and has {0} units", theFile.UnitCount);
+                Console.Out.WriteLine(theFile.UnitDir.buildTable());
+            }
+            catch (SUE_InvalidFileException sueIFE)
+            {
+                Console.Out.WriteLine(sueIFE.Message);
+            }
+            
             /*
             // Try reading the names
             theNames = theFile.getUnitNames();

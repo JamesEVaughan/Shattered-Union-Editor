@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SUEditor.Types
 {
+    /// <summary>
+    /// Name is 29-byte array that is stores an ASCII-encoded string from the file.
+    /// </summary>
     class Name
     {
-        /*
-         * Name represents a 39 byte, character-array data type from UnitTypes.dat
-         */
 
         private char[] data;
 
@@ -38,11 +38,11 @@ namespace SUEditor.Types
 
         public Name(char[] ca)
         {
-            data = new char[39];
+            data = new char[29];
             int limit;
-            if (ca.Length >= 39)
+            if (ca.Length >= 29)
             {
-                limit = 39;
+                limit = 29;
             }
             else
             {
@@ -62,13 +62,13 @@ namespace SUEditor.Types
 
         public Name()
         {
-            data = new char[39];
+            data = new char[29];
         }
 
         public Name(Name n)
         {
-            data = new char[39];
-            for(int i = 0; i < 39; i++)
+            data = new char[29];
+            for(int i = 0; i < 29; i++)
             {
                 data[i] = n.data[i];
             }
@@ -76,8 +76,8 @@ namespace SUEditor.Types
 
         static public int Size()
         {
-            // Returns the number of bytes in Short
-            return 39;
+            // Returns the number of bytes in Name
+            return 29;
         }
     }
 }
