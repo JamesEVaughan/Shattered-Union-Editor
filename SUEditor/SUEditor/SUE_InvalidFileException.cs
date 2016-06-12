@@ -11,7 +11,8 @@ namespace SUEditor
     /// </summary>
     class SUE_InvalidFileException : Exception
     {
-        public SUE_InvalidFileException()
+        public SUE_InvalidFileException() :
+            base()
         {
 
         }

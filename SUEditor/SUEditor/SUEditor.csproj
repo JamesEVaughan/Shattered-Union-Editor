@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="MainConsoleTester.cs" />
     <Compile Include="SUE_InvalidFileException.cs" />
+    <Compile Include="Types\SUEEnums.cs" />
     <Compile Include="Types\UTypeByte.cs" />
     <Compile Include="Types\UTypeInt.cs" />
     <Compile Include="Types\UTypeName.cs" />

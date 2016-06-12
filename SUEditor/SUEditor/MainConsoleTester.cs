@@ -16,7 +16,6 @@ namespace SUEditor
         {
             UnitFile theFile;
             string fName = "UnitTypes.dat";
-            string[] theNames;
 
             // Try building it with the file name provided
             theFile = new UnitFile(fName);

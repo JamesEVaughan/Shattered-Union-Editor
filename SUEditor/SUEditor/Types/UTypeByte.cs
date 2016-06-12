@@ -6,27 +6,44 @@ using System.Threading.Tasks;
 
 namespace SUEditor.Types
 {
-    class Byte
+    /// <summary>
+    /// SUEByte represents a 1-byte, numeric data type from the UnitTypes file.
+    /// </summary>
+    class SUEByte
     {
-        /// <summary>
-        /// Byte represents a 1-byte, numeric data type from the UnitTypes file.
-        /// </summary>
         
         public byte Value { get; set; }
 
-        public Byte(byte b)
+        public SUEByte(byte b)
         {
             Value = b;
         }
 
-        public Byte(Byte b)
+        public SUEByte(SUEByte b)
         {
             Value = b.Value;
         }
+
+        public SUEByte()
+        {
+            Value = 0;
+        }
+
         static public int Size()
         {
-            // Returns number of bytes in Byte
+            // Returns number of bytes in SUEByte
             return 1;
+        }
+
+        // Implicit converstions
+        public static implicit operator byte(SUEByte sueb)
+        {
+            return sueb.Value;
+        }
+
+        public static implicit operator SUEByte(byte b)
+        {
+            return new SUEByte(b);
         }
     }
 }

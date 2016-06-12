@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SUEditor.Types
 {
     /// <summary>
-    /// Name is 29-byte array that is stores an ASCII-encoded string from the file.
+    /// SUEString is 29-byte array that is stores an ASCII-encoded string from the file.
     /// </summary>
-    class Name
+    class SUEString
     {
 
         private char[] data;
@@ -22,7 +22,7 @@ namespace SUEditor.Types
             }
             set
             {
-                for (int i = 0; i < Name.Size(); i++)
+                for (int i = 0; i < SUEString.Size(); i++)
                 {
                     if (i < value.Length)
                     {
@@ -30,13 +30,14 @@ namespace SUEditor.Types
                     }
                     else
                     {
+                        // Pad array with zeroes if the string is smaller than 29
                         data[i] = '\0';
                     }
                 }
             }
         }
 
-        public Name(char[] ca)
+        public SUEString(char[] ca)
         {
             data = new char[29];
             int limit;
@@ -55,17 +56,17 @@ namespace SUEditor.Types
        
         }
 
-        public Name(string s) :
+        public SUEString(string s) :
             this(s.ToCharArray())
         {
         }
 
-        public Name()
+        public SUEString()
         {
             data = new char[29];
         }
 
-        public Name(Name n)
+        public SUEString(SUEString n)
         {
             data = new char[29];
             for(int i = 0; i < 29; i++)
@@ -76,7 +77,7 @@ namespace SUEditor.Types
 
         static public int Size()
         {
-            // Returns the number of bytes in Name
+            // Returns the number of bytes in SUEString
             return 29;
         }
     }

@@ -31,7 +31,7 @@ namespace SUEditor
         }
 
         // Starts with a node
-        public UnitList(Name dn, long i)
+        public UnitList(SUEString dn, long i)
         {
             length = 1;
             first = new UnitNode(dn, i);
@@ -44,7 +44,7 @@ namespace SUEditor
         /// </summary>
         /// <param name="dn">Name of the unit to be added</param>
         /// <param name="i">Index in the file</param>
-        public void addNode(Name dn, long i)
+        public void addNode(SUEString dn, long i)
         {
             // IF we're an empty list
             if (length == 0)
@@ -100,7 +100,7 @@ namespace SUEditor
             private UnitNode next;
 
             // Properties
-            public Name DisplayName { get; set; }
+            public SUEString DisplayName { get; set; }
             public long Index { get; set; }
             public UnitNode Next => next;
 
@@ -108,14 +108,14 @@ namespace SUEditor
             //Constructors
             public UnitNode()
             {
-                DisplayName = new Name();
+                DisplayName = new SUEString();
                 Index = 0;
                 next = null;
             }
 
-            public UnitNode(Name dn, long i)
+            public UnitNode(SUEString dn, long i)
             {
-                DisplayName = new Name(dn);
+                DisplayName = new SUEString(dn);
                 Index = i;
                 next = null;
             }

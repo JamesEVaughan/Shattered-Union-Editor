@@ -8,83 +8,42 @@ namespace SUEditor
 {
     using Types;
 
+    /// <summary>
+    /// Unit represents an individual unit from Shattered Union.
+    /// </summary>
     class Unit
     {
-        /*
-         * Unit represents an individual unit from Shattered Union.
-         */
-
-        // Data members
-        private Name displayName;   // Name displayed in game
-        private Short airAttack;    // Attack strength against flying targets
-        private Short armorAttack;  // Attack strength against ground vehicle targets
-        private Short infAttack;    // Attack strength against infantry targets
-
         // Properties
-        public string DisplayName
-        {
-            get
-            {
-                return displayName.Value;
-            }
-
-            set
-            {
-                displayName.Value = value;
-            }
-        }
-
-        public short AirAttack
-        {
-            get
-            {
-                return airAttack.Value;
-            }
-            set
-            {
-                airAttack.Value= value;
-            }
-        }
-
-        public short ArmorAttack
-        {
-            get
-            {
-                return armorAttack.Value;
-            }
-            set
-            {
-                armorAttack.Value = value;
-            }
-        }
-
-        public short InfAttack
-        {
-            get
-            {
-                return infAttack.Value;
-            }
-            set
-            {
-                infAttack.Value = value;
-            }
-        }
-
+        public SUEString DisplayName;   // SUEString displayed in game
+        public SUEShort AirAttack;      // Attack strength against flying targets
+        public SUEShort ArmorAttack;    // Attack strength against ground vehicle targets
+        public SUEShort InfAttack;      // Attack strength against infantry targets
+        public SUEShort HitPoints;      // Number of hit points the unit possesses
+        public SUEShort Defense;        // Defense strength against attacks
+        public SUEShort Vision;         // How far the unit can see
+        public SUEInt GasTank;          // How far the unit can travel with refuelling
+        public SUEInt Speed;            // How many tiles unit can travel in a single turn
+        public UnitArmorClass UnitCat;  // What kind of unit is this?
+        
         // Constructors
-        public Unit(Name dn, Short air, Short arm, Short inf)
+        public Unit(SUEString dn) :
+            this()
         {
-            displayName = new Name(dn);
-            airAttack = new Short(air);
-            armorAttack = new Short(arm);
-            infAttack = new Short(inf);
+            DisplayName = new SUEString(dn);
         }
 
         public Unit()
         {
-            displayName = new Name();
-            airAttack = new Short(0);
-            armorAttack = new Short(0);
-            infAttack = new Short(0);
+            DisplayName = new SUEString();
+            AirAttack = 0;
+            ArmorAttack = 0;
+            InfAttack = 0;
+            HitPoints = 0;
+            Defense = 0;
+            Vision = 0;
+            GasTank = 0;
+            Speed = 0;
+            UnitCat = UnitArmorClass.UnitAir;
         }
     }
 }

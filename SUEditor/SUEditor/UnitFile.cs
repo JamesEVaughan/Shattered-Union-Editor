@@ -94,7 +94,7 @@ namespace SUEditor
                     }
 
                     // Finally, build the UnitDir
-                    Types.Name tempName;
+                    Types.SUEString tempName;
                     byte[] tempBytes = new byte[29];
                     long tempUnitInd;
                     for (int i = 0; i < UnitCount; i++)
@@ -102,9 +102,9 @@ namespace SUEditor
                         // Pull the index from the position of the reader
                         tempUnitInd = reader.BaseStream.Position;
                         // Read the name from the file
-                        tempBytes = reader.ReadBytes(Types.Name.Size());
-                        // Convert the byte array to a Name
-                        tempName = new Types.Name(System.Text.Encoding.ASCII.GetString(tempBytes));
+                        tempBytes = reader.ReadBytes(Types.SUEString.Size());
+                        // Convert the byte array to a SUEString
+                        tempName = new Types.SUEString(System.Text.Encoding.ASCII.GetString(tempBytes));
                         unitDir.addNode(tempName, tempUnitInd);
                         reader.BaseStream.Seek(116, SeekOrigin.Current);
                     }
@@ -115,6 +115,29 @@ namespace SUEditor
 
                 }
             }
+        }
+        
+        /// <summary>
+        /// Loads a unit at the specified index in UnitDir
+        /// </summary>
+        /// <param name="index">Index of unit in UnitDir</param>
+        /// <param name="un">The Unit object for the unit to be loaded into</param>
+        public void loadUnit(int index, Unit un)
+        {
+            // First, make sure the arguments are valid
+            if (index >= unitDir.Length)
+            {
+                // That's not a valid index
+                return;
+            }
+
+            // Make sure un is initialized
+            if (un == null)
+            {
+                un = new Unit();
+            }
+
+            long fileIndex = unitDir.getNodeAt(index).Index;   // Find where we need to be in the file
         }
     }
 }

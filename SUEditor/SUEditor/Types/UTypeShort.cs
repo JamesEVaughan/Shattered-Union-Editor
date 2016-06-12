@@ -6,28 +6,44 @@ using System.Threading.Tasks;
 
 namespace SUEditor.Types
 {
-    class Short
+    /// <summary>
+    /// SUEShort represents a 2-byte, numeric data type from UnitTypes.dat
+    ///</summary>
+    class SUEShort
     {
-        /// <summary>
-        /// Short represents a 2-byte, numeric data type from UnitTypes.dat
-        ///</summary>
 
         public short Value { get; set; }
 
-        public Short(short s)
+        public SUEShort(short s)
         {
             Value = s;
         }
 
-        public Short (Short s)
+        public SUEShort(SUEShort s)
         {
             Value = s.Value;
         }
 
+        public SUEShort()
+        {
+            Value = 0;
+        }
+
         static public int Size ()
         {
-            // Returns the number of bytes in Short
+            // Returns the number of bytes in SUEShort
             return 2;
+        }
+
+        // Implicit conversions
+        static public implicit operator short(SUEShort sues)
+        {
+            return sues.Value;
+        }
+
+        static public implicit operator SUEShort(short s)
+        {
+            return new SUEShort(s);
         }
     }
 }
