@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using SUEditor.Types;
 
 namespace SUEditor
 {
@@ -17,7 +18,6 @@ namespace SUEditor
         private const int MAGIC_NUMBER = 0x08;  // The magic number for UnitFile.dat
 
         // Fields
-        private bool isLocal;           // Is UnitTypes.dat local
         private string fileLocation;    // The location of the UnitTypes.dat
         private string fileName;        // The name of the file to be edited
         private UnitList unitDir;       // A list of all the units in the file
@@ -31,14 +31,13 @@ namespace SUEditor
         public UnitFile(string fn) : 
             this(fn, "")
         {
-            isLocal = true;
+
         }
 
         public UnitFile(string fn, string loc)
         {
             fileName = fn;
             fileLocation = loc;
-            isLocal = false;
             UnitCount = 0;
             unitDir = new UnitList();
         }
@@ -73,7 +72,7 @@ namespace SUEditor
                 return;
             }
 
-            using (BinaryReader reader = new BinaryReader(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Read)))
+            using (BinaryReader reader = openReader())
             {
                 try
                 {
@@ -138,6 +137,69 @@ namespace SUEditor
             }
 
             long fileIndex = unitDir.getNodeAt(index).Index;   // Find where we need to be in the file
+
+            using (BinaryReader reader = openReader())
+            {
+                try
+                {
+                    // And now the fun begins, reading in each value from the file
+                    // NOTE: Values will be read in order to limit unneccessary jumping in the file
+                    // Consult SUEEnums.AttributeOffset for ordered list
+
+                    // First, move cursor to the start of the unit structure
+                    reader.BaseStream.Seek(fileIndex, SeekOrigin.Begin);
+
+                    un.DisplayName = new SUEString(reader.ReadBytes(SUEString.Size()));
+                    
+                    // Jump
+                    reader.BaseStream.Seek(fileIndex + (long)AttributeOffeset.FuelAmt, SeekOrigin.Begin);
+
+                    un.GasTank = reader.ReadInt32();
+                    un.Speed = reader.ReadInt32();
+
+                    // Jump
+                    reader.BaseStream.Seek(fileIndex + (long)AttributeOffeset.SightRange, SeekOrigin.Begin);
+
+                    un.Vision = reader.ReadInt16();
+                    un.AirAttack = reader.ReadInt16();
+                    un.ArmorAttack = reader.ReadInt16();
+                    un.InfAttack = reader.ReadInt16();
+                    un.Defense = reader.ReadInt16();
+
+                    // Jump
+                    reader.BaseStream.Seek(fileIndex + (long)AttributeOffeset.Health, SeekOrigin.Begin);
+
+                    un.HitPoints = reader.ReadInt16();
+
+                    // Jump
+                    reader.BaseStream.Seek(fileIndex + (long)AttributeOffeset.UnitClass, SeekOrigin.Begin);
+
+                    un.UnitCat = (UnitArmorClass)reader.ReadInt16();
+                }
+                catch 
+                {
+                    throw;
+                }
+            }
+        }
+
+        // Helpers
+        /// <summary>
+        /// Opens the file for reading using BinaryReader
+        /// </summary>
+        /// <returns>A BinaryReader object set to Read</returns>
+        private BinaryReader openReader()
+        {
+            return new BinaryReader(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Read));
+        }
+
+        /// <summary>
+        /// Opens the file for writing using BinaryWriter
+        /// </summary>
+        /// <returns>A BinaryWriter object set to Write</returns>
+        private BinaryWriter openWriter()
+        {
+            return new BinaryWriter(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Write));
         }
     }
 }

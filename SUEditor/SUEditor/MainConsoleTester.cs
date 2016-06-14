@@ -25,23 +25,20 @@ namespace SUEditor
             {
                 theFile.init();
                 Console.Out.WriteLine("The file was read and has {0} units", theFile.UnitCount);
-                Console.Out.WriteLine(theFile.UnitDir.buildTable());
+
+                // Try and load a specific unit
+                Unit curUnit = new Unit();
+                theFile.loadUnit(3, curUnit);
+
+                Console.Out.WriteLine("Unit name: " + curUnit.DisplayName.Value);
+                Console.Out.WriteLine("Hit points: {0}", (short)curUnit.HitPoints);
+                Console.Out.WriteLine("Vehicle Attack: {0}", (short)curUnit.ArmorAttack);
             }
             catch (SUE_InvalidFileException sueIFE)
             {
                 Console.Out.WriteLine(sueIFE.Message);
             }
-            
-            /*
-            // Try reading the names
-            theNames = theFile.getUnitNames();
 
-            // Output them all
-            foreach(string name in theNames)
-            {
-                Console.Out.WriteLine(name);
-            }
-            */
             return 0;
         }
 

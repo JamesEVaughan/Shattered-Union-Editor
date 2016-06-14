@@ -56,6 +56,22 @@ namespace SUEditor.Types
        
         }
 
+        public SUEString(byte[] ba)
+        {
+            data = new char[Size()];
+            int limit = Size();
+
+            if (ba.Length < Size())
+            {
+                limit = ba.Length;
+            }
+
+            for (int i = 0; i < limit; i++)
+            {
+                data[i] = (char)ba[i];
+            }
+        }
+
         public SUEString(string s) :
             this(s.ToCharArray())
         {
