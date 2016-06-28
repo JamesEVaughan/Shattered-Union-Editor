@@ -18,14 +18,13 @@ namespace SUEditor
         private const int MAGIC_NUMBER = 0x08;  // The magic number for UnitFile.dat
 
         // Fields
-        private string fileLocation;    // The location of the UnitTypes.dat
-        private string fileName;        // The name of the file to be edited
-        private UnitList unitDir;       // A list of all the units in the file
+        private string fileLocation;        // The location of the UnitTypes.dat
+        private string fileName;            // The name of the file to be edited
 
         // Properties
         public int UnitCount { get; set; } // Number of units in the file
-        public UnitList UnitDir => unitDir;
-        
+        public List<UnitFileNode> UnitDir; // A list of all the units in the file
+
 
         // Constructors
         public UnitFile(string fn) : 
@@ -39,7 +38,8 @@ namespace SUEditor
             fileName = fn;
             fileLocation = loc;
             UnitCount = 0;
-            unitDir = new UnitList();
+            // Unmodified UnitFile.dat contains 86 entries, 100 should limit unnecessary resizing
+            UnitDir = new List<UnitFileNode>(100);
         }
 
         public UnitFile() :
@@ -94,17 +94,14 @@ namespace SUEditor
 
                     // Finally, build the UnitDir
                     Types.SUEString tempName;
-                    byte[] tempBytes = new byte[29];
                     long tempUnitInd;
                     for (int i = 0; i < UnitCount; i++)
                     {
                         // Pull the index from the position of the reader
                         tempUnitInd = reader.BaseStream.Position;
-                        // Read the name from the file
-                        tempBytes = reader.ReadBytes(Types.SUEString.Size());
-                        // Convert the byte array to a SUEString
-                        tempName = new Types.SUEString(System.Text.Encoding.ASCII.GetString(tempBytes));
-                        unitDir.addNode(tempName, tempUnitInd);
+                        // Read the name from the file and convert to a SUEString
+                        tempName = new Types.SUEString(reader.ReadBytes(Types.SUEString.Size()));
+                        UnitDir.Add(new UnitFileNode(tempName, tempUnitInd));
                         reader.BaseStream.Seek(116, SeekOrigin.Current);
                     }
                 }
@@ -124,7 +121,7 @@ namespace SUEditor
         public void loadUnit(int index, Unit un)
         {
             // First, make sure the arguments are valid
-            if (index >= unitDir.Length)
+            if (index >= UnitDir.Count)
             {
                 // That's not a valid index
                 return;
@@ -136,7 +133,7 @@ namespace SUEditor
                 un = new Unit();
             }
 
-            long fileIndex = unitDir.getNodeAt(index).Index;   // Find where we need to be in the file
+            long fileIndex = UnitDir[index].Index;   // Find where we need to be in the file
 
             using (BinaryReader reader = openReader())
             {

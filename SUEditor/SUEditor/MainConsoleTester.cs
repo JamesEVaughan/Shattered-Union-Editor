@@ -33,6 +33,7 @@ namespace SUEditor
                 Console.Out.WriteLine("Unit name: " + curUnit.DisplayName.Value);
                 Console.Out.WriteLine("Hit points: {0}", (short)curUnit.HitPoints);
                 Console.Out.WriteLine("Vehicle Attack: {0}", (short)curUnit.ArmorAttack);
+                Console.Out.WriteLine("Unit Armor Class: {0}", curUnit.UnitCat);
             }
             catch (SUE_InvalidFileException sueIFE)
             {

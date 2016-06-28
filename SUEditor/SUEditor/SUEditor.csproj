@@ -67,7 +67,8 @@
     <Compile Include="Types\UTypeShort.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="UnitFile.cs" />
-    <Compile Include="UnitList.cs" />
+    <Compile Include="UnitFileNode.cs" />
+    <Compile Include="UnitsVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

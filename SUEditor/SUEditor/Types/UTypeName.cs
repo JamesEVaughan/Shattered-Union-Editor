@@ -9,16 +9,16 @@ namespace SUEditor.Types
     /// <summary>
     /// SUEString is 29-byte array that is stores an ASCII-encoded string from the file.
     /// </summary>
-    class SUEString
+    class SUEString : IEquatable<SUEString>
     {
 
-        private char[] data;
+        private byte[] data;
 
         public string Value
         {
             get
             {
-                return new string(data);
+                return Encoding.UTF8.GetString(data);
             }
             set
             {
@@ -26,12 +26,12 @@ namespace SUEditor.Types
                 {
                     if (i < value.Length)
                     {
-                        data[i] = value[i];
+                        data[i] = (byte)value[i];
                     }
                     else
                     {
                         // Pad array with zeroes if the string is smaller than 29
-                        data[i] = '\0';
+                        data[i] = 0;
                     }
                 }
             }
@@ -39,7 +39,7 @@ namespace SUEditor.Types
 
         public SUEString(char[] ca)
         {
-            data = new char[29];
+            data = new byte[29];
             int limit;
             if (ca.Length >= 29)
             {
@@ -51,14 +51,14 @@ namespace SUEditor.Types
             }
             for (int i = 0; i < limit; i++)
             {
-                data[i] = ca[i];
+                data[i] = (byte)ca[i];
             }
        
         }
 
         public SUEString(byte[] ba)
         {
-            data = new char[Size()];
+            data = new byte[Size()];
             int limit = Size();
 
             if (ba.Length < Size())
@@ -68,7 +68,7 @@ namespace SUEditor.Types
 
             for (int i = 0; i < limit; i++)
             {
-                data[i] = (char)ba[i];
+                data[i] = ba[i];
             }
         }
 
@@ -79,12 +79,12 @@ namespace SUEditor.Types
 
         public SUEString()
         {
-            data = new char[29];
+            data = new byte[29];
         }
 
         public SUEString(SUEString n)
         {
-            data = new char[29];
+            data = new byte[29];
             for(int i = 0; i < 29; i++)
             {
                 data[i] = n.data[i];
@@ -95,6 +95,44 @@ namespace SUEditor.Types
         {
             // Returns the number of bytes in SUEString
             return 29;
+        }
+
+        public bool Equals(SUEString other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            /// Obviously true
+            else if (other == this)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < 29; i++)
+            {
+                if (data[i] != other.data[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is SUEString)
+            {
+                return Equals((SUEString)obj);
+            }
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
         }
     }
 }

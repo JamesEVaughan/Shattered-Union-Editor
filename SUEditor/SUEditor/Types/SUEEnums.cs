@@ -39,13 +39,13 @@ namespace SUEditor.Types
     }
 
     /// <summary>
-    /// Defines the available unit classes available. Used to determine the which attack
-    /// value is used during combat
+    /// Defines the  unit classes available. Used to determine the which attack value
+    /// is used during combat
     /// </summary>
     enum UnitArmorClass : short
     {
-        UnitAir = 0x00, // An air unit, such as a plane or helicopter
-        UnitInf = 0x01, // An infantry unit, such as a squad of soldiers or towed gun
-        UnitVeh = 0x03, // A vehicular unit, such as a car or heavy tank
+        Air = 0x00, // An air unit, such as a plane or helicopter
+        Vehicle = 0x01, // A vehicular unit, such as a car or heavy tank
+        Infantry = 0x02, // An infantry unit, such as a squad of soldiers or towed gun
     }
 }

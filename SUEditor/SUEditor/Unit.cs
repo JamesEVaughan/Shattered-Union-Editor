@@ -43,7 +43,7 @@ namespace SUEditor
             Vision = 0;
             GasTank = 0;
             Speed = 0;
-            UnitCat = UnitArmorClass.UnitAir;
+            UnitCat = UnitArmorClass.Air;
         }
     }
 }
