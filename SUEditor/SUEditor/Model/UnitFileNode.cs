@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SUEditor
+namespace SUEditor.Model
 {
     using Types;
     /// This file used to contain a singly-linked list built around UnitFileNode. That class

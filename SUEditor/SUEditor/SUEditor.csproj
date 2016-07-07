@@ -59,17 +59,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MainConsoleTester.cs" />
-    <Compile Include="SUE_InvalidFileException.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="Model\SUE_InvalidFileException.cs" />
     <Compile Include="Types\SUEEnums.cs" />
     <Compile Include="Types\UTypeByte.cs" />
     <Compile Include="Types\UTypeInt.cs" />
     <Compile Include="Types\UTypeName.cs" />
     <Compile Include="Types\UTypeShort.cs" />
-    <Compile Include="Unit.cs" />
-    <Compile Include="UnitFile.cs" />
-    <Compile Include="UnitFileNode.cs" />
-    <Compile Include="UnitsVM.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Model\Unit.cs" />
+    <Compile Include="Model\UnitFile.cs" />
+    <Compile Include="Model\UnitFileNode.cs" />
+    <Compile Include="ViewModel\UnitEditorVM.cs" />
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -77,7 +78,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

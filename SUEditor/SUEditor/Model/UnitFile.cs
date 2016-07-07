@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using SUEditor.Types;
 
-namespace SUEditor
+namespace SUEditor.Model
 {
     /// <summary>
     /// UnitFile respresents the UnitTypes.dat file. It is capable of reading and writing

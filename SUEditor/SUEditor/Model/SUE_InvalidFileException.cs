@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SUEditor
+namespace SUEditor.Model
 {
     /// <summary>
     /// This exception is thrown if a given file doesn't exist or is not properly formatted.

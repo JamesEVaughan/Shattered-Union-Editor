@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SUEditor.Types;
+using SUEditor.Model;
 
-namespace SUEditor
+namespace SUEditor.ViewModel
 {
     /// <summary>
-    /// This is the ViewModel class for the UnitEditor
+    /// This is the ViewModel class for the Unit Editor tab
     /// </summary>
-    class UnitsVM
+    class UnitEditorVM
     {
         // Properties
         /// <summary>
