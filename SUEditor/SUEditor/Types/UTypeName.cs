@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SUEditor.Types
 {
     /// <summary>
-    /// SUEString is 29-byte array that is stores an ASCII-encoded string from the file.
+    /// SUEString is 30-byte array that is stores an ASCII-encoded string from the file.
     /// </summary>
     class SUEString : IEquatable<SUEString>
     {
@@ -39,11 +39,11 @@ namespace SUEditor.Types
 
         public SUEString(char[] ca)
         {
-            data = new byte[29];
+            data = new byte[30];
             int limit;
-            if (ca.Length >= 29)
+            if (ca.Length >= 30)
             {
-                limit = 29;
+                limit = 30;
             }
             else
             {
@@ -79,13 +79,13 @@ namespace SUEditor.Types
 
         public SUEString()
         {
-            data = new byte[29];
+            data = new byte[30];
         }
 
         public SUEString(SUEString n)
         {
-            data = new byte[29];
-            for(int i = 0; i < 29; i++)
+            data = new byte[30];
+            for(int i = 0; i < 30; i++)
             {
                 data[i] = n.data[i];
             }
@@ -95,6 +95,26 @@ namespace SUEditor.Types
         {
             // Returns the number of bytes in SUEString
             return 29;
+        }
+
+        /// <summary>
+        /// A separate setter for cases of having a byte array
+        /// </summary>
+        /// <param name="ba"> The byte to set to Value </param>
+        public void ByteArraySetter(byte[] ba)
+        {
+            int tempSize = (ba.Length >= Size()) ? Size() : ba.Length;
+            for (int i = 0; i < Size(); i++)
+            {
+                if (i < tempSize)
+                {
+                    data[i] = ba[i];
+                }
+                else
+                {
+                    data[i] = 0;
+                }
+            }
         }
 
         public bool Equals(SUEString other)
