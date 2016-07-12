@@ -11,9 +11,13 @@ namespace SUEditor.Types
     /// </summary>
     class SUEString : IEquatable<SUEString>
     {
+        // Constants
+        public const int Size = 30;
 
+        // Fields
         private byte[] data;
 
+        // Properties
         public string Value
         {
             get
@@ -22,7 +26,7 @@ namespace SUEditor.Types
             }
             set
             {
-                for (int i = 0; i < SUEString.Size(); i++)
+                for (int i = 0; i < SUEString.Size; i++)
                 {
                     if (i < value.Length)
                     {
@@ -30,7 +34,7 @@ namespace SUEditor.Types
                     }
                     else
                     {
-                        // Pad array with zeroes if the string is smaller than 29
+                        // Pad array with zeroes if the string is smaller than 30
                         data[i] = 0;
                     }
                 }
@@ -39,11 +43,11 @@ namespace SUEditor.Types
 
         public SUEString(char[] ca)
         {
-            data = new byte[30];
+            data = new byte[Size];
             int limit;
-            if (ca.Length >= 30)
+            if (ca.Length >= Size)
             {
-                limit = 30;
+                limit = Size;
             }
             else
             {
@@ -58,10 +62,10 @@ namespace SUEditor.Types
 
         public SUEString(byte[] ba)
         {
-            data = new byte[Size()];
-            int limit = Size();
+            data = new byte[Size];
+            int limit = Size;
 
-            if (ba.Length < Size())
+            if (ba.Length < Size)
             {
                 limit = ba.Length;
             }
@@ -79,22 +83,16 @@ namespace SUEditor.Types
 
         public SUEString()
         {
-            data = new byte[30];
+            data = new byte[Size];
         }
 
         public SUEString(SUEString n)
         {
-            data = new byte[30];
-            for(int i = 0; i < 30; i++)
+            data = new byte[Size];
+            for(int i = 0; i < Size; i++)
             {
                 data[i] = n.data[i];
             }
-        }
-
-        static public int Size()
-        {
-            // Returns the number of bytes in SUEString
-            return 29;
         }
 
         /// <summary>
@@ -103,8 +101,8 @@ namespace SUEditor.Types
         /// <param name="ba"> The byte to set to Value </param>
         public void ByteArraySetter(byte[] ba)
         {
-            int tempSize = (ba.Length >= Size()) ? Size() : ba.Length;
-            for (int i = 0; i < Size(); i++)
+            int tempSize = (ba.Length >= Size) ? Size : ba.Length;
+            for (int i = 0; i < Size; i++)
             {
                 if (i < tempSize)
                 {
@@ -130,7 +128,7 @@ namespace SUEditor.Types
                 return true;
             }
 
-            for (int i = 0; i < 29; i++)
+            for (int i = 0; i < Size; i++)
             {
                 if (data[i] != other.data[i])
                 {

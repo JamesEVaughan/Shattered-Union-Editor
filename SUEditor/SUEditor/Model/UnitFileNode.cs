@@ -12,32 +12,36 @@ namespace SUEditor.Model
     /// forgot about the bountiful library of .NET. :<
 
     /// <summary>
-    /// UnitFileNode is a node class for a List. It stores the name of a unit in "UnitFile.dat"
-    /// and the start of it's corresponding data struct. Implements IEquatable and IComparable.
+    /// UnitFileNode is a node class for a List. It stores an instance of a Unit and the start of  
+    /// its corresponding data structure in UnitFile.dat. Implements IEquatable and IComparable.
     /// </summary>
     class UnitFileNode : IEquatable<UnitFileNode>, IComparable<UnitFileNode>
     {
         // Properties
         /// <summary>
-        /// Name of the unit.
+        /// The actaul representation of this unit
         /// </summary>
-        public SUEString Name { get; set; }
+        public Unit TheUnit { get; private set; }
         /// <summary>
         /// Byte-address of the unit in "UnitFile.dat"
         /// </summary>
         public long Index { get; set; }
+        /// <summary>
+        /// The DisplayName of the unit we're pointing at
+        /// </summary>
+        public SUEString Name => TheUnit.DisplayName;
 
 
         //Constructors
         public UnitFileNode()
         {
-            Name = new SUEString();
             Index = 0;
+            TheUnit = null;
         }
-
-        public UnitFileNode(SUEString dn, long i)
+        
+        public UnitFileNode(Unit un, long i)
         {
-            Name = new SUEString(dn);
+            TheUnit = un;
             Index = i;
         }
         

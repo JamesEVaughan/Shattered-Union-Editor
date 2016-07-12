@@ -18,7 +18,6 @@ namespace SUEditor
         {
             UnitFile theFile;
             string fName = "UnitTypes.dat";
-            UnitList theList = new UnitList();
             Unit curUnit;
 
             // Try building it with the file name provided
@@ -30,16 +29,20 @@ namespace SUEditor
                 theFile.init();
                 Console.Out.WriteLine("The file was read and has {0} units", theFile.UnitCount);
 
-                // Try and load all the units
-                theFile.loadUnits(theList);
-
-                Console.Out.WriteLine("The list was build and has {0}", theList.TheUnits.Count);
-
-                for (int i = 0; i < theList.TheUnits.Count; i++)
+                List<UnitFactionNode> theFacts = theFile.UnitDir.GetStartingUnits();
+                Console.Out.WriteLine("______________________________ NEA\tCon\tGPF\tRoT\tCal\tPac\tEU\tRUS");
+                foreach (UnitFactionNode fact in theFacts)
                 {
-                    curUnit = theList.TheUnits[i];
-                    Console.Out.WriteLine("{0} has ModelName of {1}", curUnit.DisplayName.Value, curUnit.ModelName.Value);
-                    Console.Out.WriteLine("Has a Flag1or3 of {0} and Attack Range of {1:X}", curUnit.Flag1Or3.Value, curUnit.AttackRange.Value);
+                    Console.Out.WriteLine("{0,-30} {1,5} {2,5} {3,5} {4,5} {4,5} {5,5} {6,5} {7,5} {8,5}",
+                        fact.Name.Value,
+                        fact.FactionCounts[(int)UnitFaction.NEA].Value,
+                        fact.FactionCounts[(int)UnitFaction.Con].Value,
+                        fact.FactionCounts[(int)UnitFaction.GPF].Value,
+                        fact.FactionCounts[(int)UnitFaction.RoT].Value,
+                        fact.FactionCounts[(int)UnitFaction.Cal].Value,
+                        fact.FactionCounts[(int)UnitFaction.Pac].Value,
+                        fact.FactionCounts[(int)UnitFaction.EU].Value,
+                        fact.FactionCounts[(int)UnitFaction.Rus].Value);
                 }
             }
             catch (SUE_InvalidFileException sueIFE)

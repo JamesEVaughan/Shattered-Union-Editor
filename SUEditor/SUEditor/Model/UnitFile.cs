@@ -22,8 +22,14 @@ namespace SUEditor.Model
         private string fileName;            // The name of the file to be edited
 
         // Properties
-        public int UnitCount { get; set; } // Number of units in the file
-        public List<UnitFileNode> UnitDir; // A list of all the units in the file
+        /// <summary>
+        /// Number of units in the file
+        /// </summary>
+        public int UnitCount { get; private set; }
+        /// <summary>
+        ///  A list of all the units in the file
+        /// </summary>
+        public UnitList UnitDir { get; private set; }
 
 
         // Constructors
@@ -39,7 +45,7 @@ namespace SUEditor.Model
             fileLocation = loc;
             UnitCount = 0;
             // Unmodified UnitFile.dat contains 86 entries, 100 should limit unnecessary resizing
-            UnitDir = new List<UnitFileNode>(100);
+            UnitDir = new UnitList(100);
         }
 
         public UnitFile() :
@@ -95,16 +101,15 @@ namespace SUEditor.Model
                     }
 
                     // Finally, build the UnitDir
-                    SUEString tempName = new SUEString();
                     long tempUnitInd;
+                    tempUnitInd = reader.BaseStream.Position;
                     for (int i = 0; i < UnitCount; i++)
                     {
                         // Pull the index from the position of the reader
-                        tempUnitInd = reader.BaseStream.Position;
-                        // Read the name from the file and convert to a SUEString
-                        tempName.ByteArraySetter(reader.ReadBytes(SUEString.Size()));
-                        UnitDir.Add(new UnitFileNode(tempName, tempUnitInd));
-                        reader.BaseStream.Seek(116, SeekOrigin.Current);
+                        UnitDir.TheUnits.Add(new UnitFileNode(loadUnit((long)tempUnitInd, reader), tempUnitInd));
+
+                        // Simple sanity check
+                        tempUnitInd += 145;
                     }
                 }
 
@@ -115,108 +120,66 @@ namespace SUEditor.Model
             }
         }
 
-        /// <summary>
-        /// Builds a list of units from the file
-        /// </summary>
-        /// <param name="uList">A freshly initialized UnitList to be loaded with the units</param>
-        public void loadUnits(UnitList uList)
-        {
-            // Make sure uList is initialized
-            if (uList == null)
-            {
-                uList = new UnitList();
-            }
-
-            if (uList.TheUnits.Count > 0)
-            {
-                // It already contains stuff, leave it be
-                return;
-            }
-
-            // And now the fun begins!
-            // Just loop through the directory, loading the units into the List
-            for (int i = 0; i < UnitDir.Count; i++)
-            {
-                uList.TheUnits.Add(loadUnit(i));
-            }
-        }
-
-
         // Helpers
         /// <summary>
         /// Loads a unit at the specified index in UnitDir
         /// </summary>
-        /// <param name="index">Index of unit in UnitDir</param>
+        /// <param name="index">Index of unit in the file</param>
+        /// <param name="br">An open and active BinaryReader</param>
         /// <returns>The Unit object for the unit to be loaded into</returns>
-        private Unit loadUnit(int index)
+        private Unit loadUnit(long index, BinaryReader br)
         {
             Unit un = new Unit();
 
             // First, make sure the arguments are valid
-            if (index >= UnitDir.Count)
+            if (index >= br.BaseStream.Length)
             {
                 // That's not a valid index
                 return null;
             }
+            
+            // And now the fun begins, reading in each value from the file
+            // Consult SUEEnums.AttributeOffset for ordered list
 
-            long fileIndex = UnitDir[index].Index;   // Find where we need to be in the file
+            // First, move cursor to the start of the unit structure
+            br.BaseStream.Seek(index, SeekOrigin.Begin);
 
-            using (BinaryReader reader = openReader())
-            {
-                try
-                {
-                    // And now the fun begins, reading in each value from the file
-                    // NOTE: Values will be read in order to limit unneccessary jumping in the file
-                    // Consult SUEEnums.AttributeOffset for ordered list
-
-                    // Yes, this method of explicitly calling read is monotonous but was choosen to
-                    // keep performance
-
-                    // First, move cursor to the start of the unit structure
-                    reader.BaseStream.Seek(fileIndex, SeekOrigin.Begin);
-
-                    un.DisplayName.ByteArraySetter(reader.ReadBytes(SUEString.Size()));
-                    un.ModelName.ByteArraySetter(reader.ReadBytes(SUEString.Size()));
-                    un.ClassName.ByteArraySetter(reader.ReadBytes(SUEString.Size()));
-                    un.Flag1Or3 = reader.ReadByte();
-                    un.CanBuyFlag = reader.ReadByte();
-                    un.Cost = reader.ReadInt32();
-                    un.GasTank = reader.ReadInt32();
-                    un.Speed = reader.ReadInt32();
-                    un.AttackRange = reader.ReadInt16();
-                    un.IsIndirect = reader.ReadByte();
-                    un.IsSingleUse = reader.ReadByte();
-                    un.IsNotKept = reader.ReadByte();
-                    un.FlagZero = reader.ReadByte();
-                    un.Vision = reader.ReadInt16();
-                    un.AirAttack = reader.ReadInt16();
-                    un.ArmorAttack = reader.ReadInt16();
-                    un.InfAttack = reader.ReadInt16();
-                    un.Defense = reader.ReadInt16();
-                    un.CollateralDamage = reader.ReadInt16();
-                    un.HitPoints = reader.ReadInt16();
-                    un.Flag2Zero = reader.ReadInt16();
-                    un.Flag803F = reader.ReadInt16();
-                    un.MoveCat = (UnitMovementClass)reader.ReadInt16();
-                    un.UnitCat = (UnitArmorClass)reader.ReadInt16();
-                    un.UnkFlag1 = reader.ReadInt16();
-                    un.Faction = (UnitFaction)reader.ReadByte();
-                    un.UnkFlag2 = reader.ReadByte();
-                    un.UnkFlag3 = reader.ReadByte();
-                    un.StartsInNEA = reader.ReadByte();
-                    un.StartsInCon = reader.ReadByte();
-                    un.StartsInGPF = reader.ReadByte();
-                    un.StartsInRoT = reader.ReadByte();
-                    un.StartsInCal = reader.ReadByte();
-                    un.StartsInPac = reader.ReadByte();
-                    un.StartsInEU = reader.ReadByte();
-                    un.StartsInRus = reader.ReadByte();
-                }
-                catch
-                {
-                    throw;
-                }
-            }
+            un.DisplayName.ByteArraySetter(br.ReadBytes(SUEString.Size));
+            un.ModelName.ByteArraySetter(br.ReadBytes(SUEString.Size));
+            un.ClassName.ByteArraySetter(br.ReadBytes(SUEString.Size));
+            un.Flag1Or3 = br.ReadByte();
+            un.CanBuyFlag = br.ReadByte();
+            un.Cost = br.ReadInt32();
+            un.GasTank = br.ReadInt32();
+            un.Speed = br.ReadInt32();
+            un.AttackRange = br.ReadInt16();
+            un.IsIndirect = br.ReadByte();
+            un.IsSingleUse = br.ReadByte();
+            un.IsNotKept = br.ReadByte();
+            un.FlagZero = br.ReadByte();
+            un.Vision = br.ReadInt16();
+            un.AirAttack = br.ReadInt16();
+            un.ArmorAttack = br.ReadInt16();
+            un.InfAttack = br.ReadInt16();
+            un.Defense = br.ReadInt16();
+            un.CollateralDamage = br.ReadInt16();
+            un.HitPoints = br.ReadInt16();
+            un.Flag2Zero = br.ReadInt16();
+            un.Flag803F = br.ReadInt16();
+            un.MoveCat = (UnitMovementClass)br.ReadInt16();
+            un.UnitCat = (UnitArmorClass)br.ReadInt16();
+            un.UnkFlag1 = br.ReadInt16();
+            un.Faction = (UnitFaction)br.ReadByte();
+            un.UnkFlag2 = br.ReadByte();
+            un.UnkFlag3 = br.ReadByte();
+            un.StartsInNEA = br.ReadByte();
+            un.StartsInCon = br.ReadByte();
+            un.StartsInGPF = br.ReadByte();
+            un.StartsInRoT = br.ReadByte();
+            un.StartsInCal = br.ReadByte();
+            un.StartsInPac = br.ReadByte();
+            un.StartsInEU = br.ReadByte();
+            un.StartsInRus = br.ReadByte();
 
             return un;
         }
@@ -227,7 +190,7 @@ namespace SUEditor.Model
         /// <returns>A BinaryReader object set to Read</returns>
         private BinaryReader openReader()
         {
-            return new BinaryReader(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Read), Encoding.UTF8);
+            return new BinaryReader(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Read));
         }
 
         /// <summary>

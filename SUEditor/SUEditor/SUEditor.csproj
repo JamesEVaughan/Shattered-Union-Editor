@@ -59,6 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MainConsoleTester.cs" />
+    <Compile Include="Model\UnitFactNode.cs" />
     <Compile Include="Model\UnitList.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Model\SUE_InvalidFileException.cs" />
