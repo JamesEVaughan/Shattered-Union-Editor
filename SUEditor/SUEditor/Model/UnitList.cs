@@ -9,7 +9,7 @@ namespace SUEditor.Model
     /// <summary>
     /// UnitList is a wrapper class for a generic List. It provides some helper functions for access.
     /// </summary>
-    class UnitList
+    public class UnitList
     {
         // Properties
         /// <summary> 

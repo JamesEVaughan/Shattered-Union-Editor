@@ -9,7 +9,7 @@ namespace SUEditor.Types
     /// <summary>
     /// SUEByte represents a 1-byte, numeric data type from the UnitTypes file.
     /// </summary>
-    class SUEByte : IEquatable<SUEByte>, IComparable<SUEByte>
+    public class SUEByte : IEquatable<SUEByte>, IComparable<SUEByte>
     {
         
         public byte Value { get; set; }

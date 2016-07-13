@@ -9,7 +9,7 @@ namespace SUEditor.Types
     /// <summary>
     /// SUEShort represents a 2-byte, numeric data type from UnitTypes.dat
     ///</summary>
-    class SUEShort
+    public class SUEShort
     {
 
         public short Value { get; set; }

@@ -9,7 +9,7 @@ namespace SUEditor.Model
     /// <summary>
     /// This exception is thrown if a given file doesn't exist or is not properly formatted.
     /// </summary>
-    class SUE_InvalidFileException : Exception
+    public class SUE_InvalidFileException : Exception
     {
         public SUE_InvalidFileException() :
             base()

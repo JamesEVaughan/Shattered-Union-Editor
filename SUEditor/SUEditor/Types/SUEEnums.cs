@@ -51,7 +51,7 @@ namespace SUEditor.Types
     /// Defines the  unit classes available. Used to determine the which attack value
     /// is used during combat
     /// </summary>
-    enum UnitArmorClass : short
+    public enum UnitArmorClass : short
     {
         Air = 0x00, // An air unit, such as a plane or helicopter
         Vehicle = 0x01, // A vehicular unit, such as a car or heavy tank
@@ -61,7 +61,7 @@ namespace SUEditor.Types
     /// <summary>
     /// Flag used in file to determine which faction(s) have access to a given unit
     /// </summary>
-    enum UnitFaction : byte
+    public enum UnitFaction : byte
     {
         NEA = 0x00, // New England Alliance
         Con = 0x01, // The Confederacy
@@ -78,7 +78,7 @@ namespace SUEditor.Types
     /// Defines the movement type used by the unit for movement calculations. Names are taken
     /// from the MainINIFile. Unusual spelling has no known reasoning.
     /// </summary>
-    enum UnitMovementClass : short
+    public enum UnitMovementClass : short
     {
         Footl = 0x00,   // This unit walks everywhere, e.g. an infantry squad
         Wheed = 0x01,   // This unit uses a number of wheels, e.g. a car

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SUEditor.Types;
 
 namespace SUEditor.Model
 {
-    using Types;
 
     /// <summary>
     /// Unit represents an individual unit from Shattered Union.
     /// </summary>
-    class Unit
+    public class Unit
     {
         // Properties
         /// <summary> The unit's name displayed in game </summary>

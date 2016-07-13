@@ -9,7 +9,7 @@ namespace SUEditor.Types
     /// <summary>
     /// SUEInt represents a 4-byte, numeric data type from UnitTypes.dat
     /// </summary>
-    class SUEInt
+    public class SUEInt
     {
 
         public int Value { get; set; }

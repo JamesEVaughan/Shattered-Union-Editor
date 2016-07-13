@@ -11,7 +11,7 @@ namespace SUEditor.Model
     /// <summary>
     /// A node for a List containing the starting armies for each faction
     /// </summary>
-    class UnitFactionNode : IEquatable<UnitFactionNode>
+    public class UnitFactionNode : IEquatable<UnitFactionNode>
     {
         // Properties
         /// <summary>

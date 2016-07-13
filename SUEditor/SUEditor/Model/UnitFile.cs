@@ -12,14 +12,23 @@ namespace SUEditor.Model
     /// UnitFile respresents the UnitTypes.dat file. It is capable of reading and writing
     /// to the file.
     /// </summary>
-    class UnitFile
+    public class UnitFile
     {
         // Constants
-        private const int MAGIC_NUMBER = 0x08;  // The magic number for UnitFile.dat
+        /// <summary>
+        /// The magic number for UnitFile.dat
+        /// </summary>
+        private const int MAGIC_NUMBER = 0x08;
 
         // Fields
-        private string fileLocation;        // The location of the UnitTypes.dat
-        private string fileName;            // The name of the file to be edited
+        /// <summary>
+        /// The file to be written to, used if IsWriteProtected is true
+        /// </summary>
+        private string writeFilePath;   //
+        /// <summary>
+        /// The name of the file to be read from, used for writing if IsWriteProtected is false
+        /// </summary>
+        private string readFilePath;     // 
 
         // Properties
         /// <summary>
@@ -30,26 +39,26 @@ namespace SUEditor.Model
         ///  A list of all the units in the file
         /// </summary>
         public UnitList UnitDir { get; private set; }
+        /// <summary>
+        /// True if the file being read is read protected, specifically is ReadOnly or protected system file
+        /// </summary>
+        public bool IsWriteProtected { get; private set; }
 
 
         // Constructors
-        public UnitFile(string fn) : 
-            this(fn, "")
+        public UnitFile(string readPath)
         {
-
-        }
-
-        public UnitFile(string fn, string loc)
-        {
-            fileName = fn;
-            fileLocation = loc;
+            readFilePath = readPath;
+            writeFilePath = null;   // Default to null, will be initialized if needed by program
             UnitCount = 0;
             // Unmodified UnitFile.dat contains 86 entries, 100 should limit unnecessary resizing
             UnitDir = new UnitList(100);
+            // Default to true, will be tested for in init()
+            IsWriteProtected = true;
         }
 
         public UnitFile() :
-            this("", "")
+            this("")
         {
 
         }
@@ -58,17 +67,17 @@ namespace SUEditor.Model
 
         /// <summary>
         /// This method handles the final intialization of UnitFile by confirming that
-        /// the file pointed to by fileName & fileLocation is correctly formatted. Throws
+        /// the file pointed to by readFilePath & fileLocation is correctly formatted. Throws
         /// SUE_InvalidFileException if file check fails.
         /// </summary>
         public void init()
         {
             /// This method handles the final intialization of UnitFile by confirming that
-            /// the file pointed to by fileName & fileLocation is correctly formatted. Throws
+            /// the file pointed to by readFilePath & fileLocation is correctly formatted. Throws
             /// SUE_InvalidFileException if file check fails.
 
             // First, simple sanity checks
-            if (fileName == "")
+            if (readFilePath == "")
             {
                 // We've gotta have a file to open...
                 throw new SUE_InvalidFileException("No file name and/or path given.");
@@ -80,6 +89,15 @@ namespace SUEditor.Model
                 return;
             }
 
+            // Check file and see if write operations are allowed
+            {
+                FileInfo readInfo = new FileInfo(readFilePath);
+                if ((readInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+
+                }
+            }
+
             using (BinaryReader reader = openReader())
             {
                 try
@@ -88,7 +106,7 @@ namespace SUEditor.Model
                     if (temp != MAGIC_NUMBER)
                     {
                         // This is the wrong file
-                        throw new SUE_InvalidFileException("Invalid UnitFile.dat");
+                        throw new SUE_InvalidFileException("Invalid UnitFile.dat. Does not start with 0x08");
                     }
                     UnitCount = reader.ReadInt32();
 
@@ -97,7 +115,7 @@ namespace SUEditor.Model
                     if (reader.BaseStream.Length != temp)
                     {
                         // The file is not the right size
-                        throw new SUE_InvalidFileException("Invalid UnitFile.dat");
+                        throw new SUE_InvalidFileException("Invalid UnitFile.dat. File is not correctly sized");
                     }
 
                     // Finally, build the UnitDir
@@ -113,10 +131,40 @@ namespace SUEditor.Model
                     }
                 }
 
-                catch
+                catch (SUE_InvalidFileException ife)
                 {
-
+                    throw ife;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Create a backup file of the opened UnitFile.data. Confirm with user before forcing an overwrite.
+        /// <para>
+        /// Should be called immediately after init and before any editing
+        /// </para>
+        /// </summary>
+        /// <param name="backupFileName">Where the file backup should be saved</param>
+        /// <param name="forceOverwrite">If we should force an overwrite of the given file.</param>
+        /// <returns>True if backup file was successfully created</returns>
+        public bool createBackup(string backupFileName, bool forceOverwrite = false)
+        {
+            // Use forceOverwrite as a short-circuit here
+            if (!forceOverwrite && File.Exists(backupFileName))
+            {
+                // If we're not overwriting and the file exists, we do nothing
+                return false;
+            }
+
+            try
+            {
+                File.Copy(readFilePath, backupFileName, forceOverwrite);
+                return true;
+            }
+            catch
+            {
+                // Nothing we can recover from here. Pass th buck up the chain
+                throw;
             }
         }
 
@@ -190,7 +238,7 @@ namespace SUEditor.Model
         /// <returns>A BinaryReader object set to Read</returns>
         private BinaryReader openReader()
         {
-            return new BinaryReader(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Read));
+            return new BinaryReader(new FileStream(readFilePath, FileMode.Open, FileAccess.Read));
         }
 
         /// <summary>
@@ -199,7 +247,14 @@ namespace SUEditor.Model
         /// <returns>A BinaryWriter object set to Write</returns>
         private BinaryWriter openWriter()
         {
-            return new BinaryWriter(new FileStream(Path.Combine(fileLocation, fileName), FileMode.Open, FileAccess.Write));
+            if (IsWriteProtected)
+            {
+                return new BinaryWriter(new FileStream(writeFilePath, FileMode.Open, FileAccess.Write));
+            }
+            else
+            {
+                return new BinaryWriter(new FileStream(readFilePath, FileMode.Open, FileAccess.Write));
+            }
         }
     }
 }

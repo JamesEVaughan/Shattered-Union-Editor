@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SUEditor"
+        xmlns:vm="clr-namespace:SUEditor.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
 
@@ -12,7 +13,7 @@
         <!-- Menu bar -->
         <Menu Margin="0" Grid.ColumnSpan="2">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Open" Click="OpenClick"/>
                 <MenuItem Header="_Exit"/>
             </MenuItem>
         </Menu>

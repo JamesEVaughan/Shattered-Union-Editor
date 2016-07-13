@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{167E5B0B-3707-43AA-B9D9-EFA6842C94F3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SUEditor</RootNamespace>
     <AssemblyName>SUEditor</AssemblyName>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SUEditor.MainConsoleTester</StartupObject>
+    <StartupObject>SUEditor.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

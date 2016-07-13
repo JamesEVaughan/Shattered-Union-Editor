@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SUEditor.Types;
 
 namespace SUEditor.Model
 {
-    using Types;
     /// This file used to contain a singly-linked list built around UnitFileNode. That class
     /// was abandoned in favor of using a List with UnitFileNode, because I was dumb and
     /// forgot about the bountiful library of .NET. :<
@@ -15,7 +15,7 @@ namespace SUEditor.Model
     /// UnitFileNode is a node class for a List. It stores an instance of a Unit and the start of  
     /// its corresponding data structure in UnitFile.dat. Implements IEquatable and IComparable.
     /// </summary>
-    class UnitFileNode : IEquatable<UnitFileNode>, IComparable<UnitFileNode>
+    public class UnitFileNode : IEquatable<UnitFileNode>, IComparable<UnitFileNode>
     {
         // Properties
         /// <summary>

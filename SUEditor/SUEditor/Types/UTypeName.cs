@@ -9,7 +9,7 @@ namespace SUEditor.Types
     /// <summary>
     /// SUEString is 30-byte array that is stores an ASCII-encoded string from the file.
     /// </summary>
-    class SUEString : IEquatable<SUEString>
+    public class SUEString : IEquatable<SUEString>
     {
         // Constants
         public const int Size = 30;
