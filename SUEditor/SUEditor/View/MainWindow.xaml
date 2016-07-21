@@ -18,10 +18,10 @@
             </MenuItem>
         </Menu>
         <!-- Tab Control for the window -->
-        <TabControl x:Name="MainTabControl" TabStripPlacement="Top" Margin="10,20,10,10" HorizontalAlignment="Stretch" Grid.ColumnSpan="2">
-            <TabItem x:Name="UnitTab" Header="Unit Editor">
-                <ComboBox x:Name="unitBox" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                          Width="120" IsReadOnly="True"/>
+        <TabControl TabStripPlacement="Top" Margin="10,20,10,10" HorizontalAlignment="Stretch" Grid.ColumnSpan="2">
+            <TabItem  Header="Unit Editor">
+                <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                          Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"/>
             </TabItem>
         </TabControl>
     </Grid>

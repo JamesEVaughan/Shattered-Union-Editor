@@ -163,7 +163,7 @@ namespace SUEditor.Model
             }
             catch
             {
-                // Nothing we can recover from here. Pass th buck up the chain
+                // Nothing we can recover from here. Pass the buck up the chain
                 throw;
             }
         }

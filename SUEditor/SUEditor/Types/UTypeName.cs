@@ -22,7 +22,7 @@ namespace SUEditor.Types
         {
             get
             {
-                return Encoding.UTF8.GetString(data);
+                return Encoding.UTF8.GetString(data).TrimEnd('\0');
             }
             set
             {
