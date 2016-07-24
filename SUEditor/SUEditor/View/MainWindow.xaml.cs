@@ -35,6 +35,8 @@ namespace SUEditor
 
             // And, finally, set our datacontext to MainVM
             this.DataContext = MainVM;
+            //DisplayName.DataContext = MainVM.UnitEditor;
+
         }
 
         /// <summary>
@@ -156,9 +158,8 @@ namespace SUEditor
             {
                 return;
             }
-            string sel = (UnitBox.SelectedItem as UnitName).ViewName;
 
-            
+            MainVM.UnitEditor.changeSelection(UnitBox.SelectedItem as UnitName);
         }
     }
 }

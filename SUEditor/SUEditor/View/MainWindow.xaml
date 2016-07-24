@@ -20,8 +20,13 @@
         <!-- Tab Control for the window -->
         <TabControl TabStripPlacement="Top" Margin="10,20,10,10" HorizontalAlignment="Stretch" Grid.ColumnSpan="2">
             <TabItem  Header="Unit Editor">
-                <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                          Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"/>
+                <Grid>
+                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" 
+                              VerticalAlignment="Top" Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"/>
+                    <TextBox Name="DisplayName" Text="{Binding UnitEditor.DispName, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                             Width="180" Margin="0,27,0,0" Height="30" />
+                    <Label x:Name="label" Content="{Binding UnitEditor.DispName}" HorizontalAlignment="Left" Height="38" Margin="10,62,0,0" VerticalAlignment="Top" Width="198"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

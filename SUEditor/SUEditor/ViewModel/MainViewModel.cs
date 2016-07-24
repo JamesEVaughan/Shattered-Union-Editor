@@ -26,6 +26,10 @@ namespace SUEditor.ViewModel
         /// A list of the names for all units we currently have
         /// </summary>
         public ObservableCollection<UnitName> NameList { get; private set; }
+        /// <summary>
+        /// This is the view model for the UnitEditor tab.
+        /// </summary>
+        public UnitEditorVM UnitEditor { get; private set; }
 
         // Constructors
         /// <summary>
@@ -37,8 +41,9 @@ namespace SUEditor.ViewModel
             // give us a file to work with. So set everything to null to be safe.
             MainUnitFile = null;
             NameList = new ObservableCollection<UnitName>();
+            UnitEditor = new UnitEditorVM();
 
-            // As this is the entry point of the program, we should handle the same amount of
+            // As this is the entry point of the program, we should handle the some amount of
             // file directory work we need done.
             System.IO.Directory.CreateDirectory("Backups"); // Sets up a folder for backup files
         }
@@ -61,7 +66,7 @@ namespace SUEditor.ViewModel
                 // Now that we've initialized the file, pull out the names for each unit
                 foreach (UnitFileNode node in MainUnitFile.UnitDir.TheUnits)
                 {
-                    NameList.Add(new UnitName(node.Name));
+                    NameList.Add(new UnitName(node.TheUnit));
                 }
             }
             catch (SUE_InvalidFileException ivfe)

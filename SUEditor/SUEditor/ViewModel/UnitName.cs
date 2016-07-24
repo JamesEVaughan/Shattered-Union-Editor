@@ -17,15 +17,12 @@ namespace SUEditor.ViewModel
     public class UnitName : INotifyPropertyChanged
     {
         // Fields
-        /// <summary>
-        /// A reference back to the DisplayName of the unit it represents
-        /// </summary>
-        SUEString modelName;
+        private Unit theUnit;
         /// <summary>
         /// This is the name that is displayed by the app. Acts as field behind the ViewName
         /// property.
         /// </summary>
-        String viewName;
+        private string viewName;
 
         // Properties
         /// <summary>
@@ -33,7 +30,7 @@ namespace SUEditor.ViewModel
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public String ViewName
+        public string ViewName
         {
             get { return viewName; }
             set
@@ -46,11 +43,16 @@ namespace SUEditor.ViewModel
             }
         }
 
-        // Constructors
-        public UnitName(SUEString uName)
+        public Unit TheUnit
         {
-            modelName = uName;
-            viewName = uName.Value;
+            get { return theUnit; }
+        }
+
+        // Constructors
+        public UnitName(Unit u)
+        {
+            theUnit = u;
+            viewName = u.DisplayName.Value;
         }
 
         // INotifyPropertyChanged Methods

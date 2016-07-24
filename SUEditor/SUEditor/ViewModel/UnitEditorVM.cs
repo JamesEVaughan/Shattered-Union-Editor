@@ -13,7 +13,7 @@ namespace SUEditor.ViewModel
     /// <summary>
     /// This is the ViewModel class for the Unit Editor tab
     /// </summary>
-    class UnitEditorVM : INotifyPropertyChanged
+    public class UnitEditorVM : INotifyPropertyChanged
     {
         // Fields
         private Unit curUnit;
@@ -131,6 +131,25 @@ namespace SUEditor.ViewModel
         public UnitEditorVM()
         {
             
+        }
+
+        // Methods
+        public void changeSelection(UnitName uName)
+        {
+            // Make it easy to access the unit
+            Unit tempy = uName.TheUnit;
+
+            // And slap all the values where they belong
+            // Use the fields instead of the properties, we shouldn't be firing PropertyChanged events
+            DispName = tempy.DisplayName.Value;
+            Health = tempy.HitPoints.Value;
+            Def = tempy.Defense.Value;
+            Movement = tempy.Speed.Value;
+            AirAtt = tempy.AirAttack.Value;
+            InfAtt = tempy.InfAttack.Value;
+            VehAtt = tempy.ArmorAttack.Value;
+            SightRange = tempy.Vision.Value;
+            Cost = tempy.Cost.Value;
         }
 
         // INotifyPropertyChanged implmentation
