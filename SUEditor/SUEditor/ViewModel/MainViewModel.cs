@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using SUEditor.Types;
 using SUEditor.Model;
 
@@ -23,10 +24,6 @@ namespace SUEditor.ViewModel
         /// </summary>
         public UnitFile MainUnitFile { get; private set; }
         /// <summary>
-        /// A list of the names for all units we currently have
-        /// </summary>
-        public ObservableCollection<UnitName> NameList { get; private set; }
-        /// <summary>
         /// This is the view model for the UnitEditor tab.
         /// </summary>
         public UnitEditorVM UnitEditor { get; private set; }
@@ -37,11 +34,12 @@ namespace SUEditor.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            // Oddly enough, we don't initialize anything here. We have to wait for the user to
-            // give us a file to work with. So set everything to null to be safe.
-            MainUnitFile = null;
-            NameList = new ObservableCollection<UnitName>();
+            // Initialize our properties
+            MainUnitFile = null; // UnitFile is initialized in InitMainUnitFile
             UnitEditor = new UnitEditorVM();
+
+            // Subscribe to our events
+            UnitEditor.PropertyChanged += OnUnitTabChange;
 
             // As this is the entry point of the program, we should handle the some amount of
             // file directory work we need done.
@@ -66,7 +64,7 @@ namespace SUEditor.ViewModel
                 // Now that we've initialized the file, pull out the names for each unit
                 foreach (UnitFileNode node in MainUnitFile.UnitDir.TheUnits)
                 {
-                    NameList.Add(new UnitName(node.TheUnit));
+                    UnitEditor.NameList.Add(new UnitName(node.TheUnit));
                 }
             }
             catch (SUE_InvalidFileException ivfe)
@@ -88,6 +86,62 @@ namespace SUEditor.ViewModel
         {
             // This is really just to expose UnitFile.createBackup to the app at large.
             return MainUnitFile.createBackup(backupLoc, overwrite);
+        }
+
+        // Event delegates
+        protected void OnUnitTabChange(object obj, EventArgs args)
+        {
+            // If obj isn't a UnitEditorVM...
+            UnitEditorVM tempUE = obj as UnitEditorVM;
+            if (tempUE == null)
+            {
+                // ...Don't do anything
+                return;
+            }
+
+            if (tempUE.IsInitialLoad)
+            {
+                // Ignore, no values are actually being changed
+                return;
+            }
+
+            // This switch handles the bulk of our updating to the model
+            string propChanged = (args as PropertyChangedEventArgs).PropertyName;
+            switch (propChanged)
+            {
+                case "DispName":
+                    tempUE.CurUnitName.TheUnit.DisplayName.Value = tempUE.DispName;
+                    // Also, propogate changes back to the NameList
+                    tempUE.CurUnitName.ViewName = tempUE.DispName;
+                    break;
+                case "Cost":
+                    tempUE.CurUnitName.TheUnit.Cost.Value = tempUE.Cost;
+                    break;
+                case "Movement":
+                    tempUE.CurUnitName.TheUnit.Speed.Value = tempUE.Movement;
+                    break;
+                case "SightRange":
+                    tempUE.CurUnitName.TheUnit.Vision = tempUE.SightRange;
+                    break;
+                case "AirAtt":
+                    tempUE.CurUnitName.TheUnit.AirAttack.Value = tempUE.AirAtt;
+                    break;
+                case "VehAtt":
+                    tempUE.CurUnitName.TheUnit.ArmorAttack.Value = tempUE.VehAtt;
+                    break;
+                case "InfAtt":
+                    tempUE.CurUnitName.TheUnit.InfAttack.Value = tempUE.InfAtt;
+                    break;
+                case "Def":
+                    tempUE.CurUnitName.TheUnit.Defense.Value = tempUE.Def;
+                    break;
+                case "Health":
+                    tempUE.CurUnitName.TheUnit.HitPoints.Value = tempUE.Health;
+                    break;
+                case "AttRange":
+                    tempUE.CurUnitName.TheUnit.AttackRange.Value = tempUE.AttRange;
+                    break;
+            }
         }
      }
 }

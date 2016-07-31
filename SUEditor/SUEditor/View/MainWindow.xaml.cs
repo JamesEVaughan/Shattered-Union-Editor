@@ -37,6 +37,8 @@ namespace SUEditor
             this.DataContext = MainVM;
             //DisplayName.DataContext = MainVM.UnitEditor;
 
+            // Subscribe to any events we haven't with our ViewModel
+            App.Current.Exit += OnExit;
         }
 
         /// <summary>
@@ -152,6 +154,11 @@ namespace SUEditor
             }
         }
 
+        public void OnSave()
+        {
+
+        }
+
         private void UnitBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (UnitBox.SelectedItem as UnitName == null)
@@ -161,5 +168,19 @@ namespace SUEditor
 
             MainVM.UnitEditor.changeSelection(UnitBox.SelectedItem as UnitName);
         }
+
+        public void OnExit(object obj, ExitEventArgs args)
+        {
+            // Check to see if the user wants to save
+            string exitMess = "Would you like to save your work before exiting?";
+            MessageBoxResult ans = MessageBox.Show(exitMess, "Save before exit", MessageBoxButton.YesNo);
+
+            // Only do stuff if the ans is yes
+            if (ans == MessageBoxResult.Yes)
+            {
+                // Run save function.
+            }
+        }
+
     }
 }

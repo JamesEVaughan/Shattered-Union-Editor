@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 using SUEditor.Types;
 using SUEditor.Model;
@@ -16,7 +17,7 @@ namespace SUEditor.ViewModel
     public class UnitEditorVM : INotifyPropertyChanged
     {
         // Fields
-        private Unit curUnit;
+        private UnitName curUnitName;
         private string dispName;
         private int cost;
         private int movement;
@@ -26,20 +27,13 @@ namespace SUEditor.ViewModel
         private short infAtt;
         private short def;
         private short health;
+        private short attRange;
 
         // Properties
         /// <summary>
-        /// The current unit that we're working with
+        /// A list of the names for all units we currently have
         /// </summary>
-        public Unit CurUnit
-        {
-            get { return curUnit; }
-            set
-            {
-                curUnit = value;
-                OnPropertyChanged("CurUnit");
-            }
-        }
+        public ObservableCollection<UnitName> NameList { get; private set; }
 
         public string DispName
         {
@@ -123,14 +117,37 @@ namespace SUEditor.ViewModel
                 OnPropertyChanged("Health");
             }
         }
+        public short AttRange
+        {
+            get { return attRange; }
+            set
+            {
+                attRange = value;
+                OnPropertyChanged("AttRange");
+            }
+        }
+        /// <summary>
+        /// This is a reference back to the currently selected UnitName from the list
+        /// </summary>
+        public UnitName CurUnitName
+        {
+            get { return curUnitName; }
+        }
+        /// <summary>
+        /// Is true iff properties are being loaded due to a ChangedSelection event
+        /// </summary>
+        public bool IsInitialLoad { get; private set; }
 
-
+        /// <summary>
+        /// The event handler for property change events
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         // Constructors
         public UnitEditorVM()
         {
-            
+            IsInitialLoad = false;
+            NameList = new ObservableCollection<UnitName>();
         }
 
         // Methods
@@ -138,9 +155,12 @@ namespace SUEditor.ViewModel
         {
             // Make it easy to access the unit
             Unit tempy = uName.TheUnit;
+            // Mark all following actions as an initial load
+            IsInitialLoad = true;
 
             // And slap all the values where they belong
-            // Use the fields instead of the properties, we shouldn't be firing PropertyChanged events
+            // Use the fields because we don't need to propogate PorpChange events
+            curUnitName = uName;
             DispName = tempy.DisplayName.Value;
             Health = tempy.HitPoints.Value;
             Def = tempy.Defense.Value;
@@ -150,6 +170,10 @@ namespace SUEditor.ViewModel
             VehAtt = tempy.ArmorAttack.Value;
             SightRange = tempy.Vision.Value;
             Cost = tempy.Cost.Value;
+            AttRange = tempy.AttackRange.Value;
+
+            // Ok, we can respond to events normally
+            IsInitialLoad = false;
         }
 
         // INotifyPropertyChanged implmentation

@@ -55,6 +55,12 @@ namespace SUEditor.ViewModel
             viewName = u.DisplayName.Value;
         }
 
+        // Methods
+        public void subscribeToPropertyChange(PropertyChangedEventHandler othHand)
+        {
+            othHand += ListenForProperty;
+        }
+
         // INotifyPropertyChanged Methods
         protected void OnPropertyChanged(string propName)
         {
@@ -69,6 +75,11 @@ namespace SUEditor.ViewModel
             {
                 hand(this, args);
             }
+        }
+
+        protected void ListenForProperty(object obj, PropertyChangedEventArgs args)
+        {
+            // First, we need to be dealing with the right stuff
         }
     }
 }

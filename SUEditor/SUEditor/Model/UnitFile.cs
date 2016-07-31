@@ -22,11 +22,11 @@ namespace SUEditor.Model
 
         // Fields
         /// <summary>
-        /// The file to be written to, used if IsWriteProtected is true
+        /// The file to be written to
         /// </summary>
         private string writeFilePath;   //
         /// <summary>
-        /// The name of the file to be read from, used for writing if IsWriteProtected is false
+        /// The name of the file to be read from
         /// </summary>
         private string readFilePath;     // 
 
@@ -165,6 +165,25 @@ namespace SUEditor.Model
             {
                 // Nothing we can recover from here. Pass the buck up the chain
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Saves the current instance of the unit file
+        /// </summary>
+        public void saveUnitFile()
+        {
+            using (BinaryWriter writer = openWriter())
+            {
+                try
+                {
+
+                }
+                catch
+                {
+                    // Throw it back to the user for proper handling
+                    throw;
+                }
             }
         }
 

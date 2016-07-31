@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using SUEditor;
+
 namespace SUEditor
 {
     /// <summary>
@@ -13,5 +15,9 @@ namespace SUEditor
     /// </summary>
     public partial class App : Application
     {
+        public void OnExit()
+        {
+            // Call our main window's closing method
+        }
     }
 }
