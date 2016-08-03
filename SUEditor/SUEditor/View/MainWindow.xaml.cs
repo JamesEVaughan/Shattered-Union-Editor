@@ -154,9 +154,81 @@ namespace SUEditor
             }
         }
 
+        public void SaveClick(object obj, EventArgs e)
+        {
+            // Just run OnSave, we don't need parameters provided
+            OnSave();
+        }
+
         public void OnSave()
         {
+            string newFile = "";
+            // First, ask if the user wants to overwrite the existing file
+            string mess = "Would you like to overwrite your current UnitTypes.dat?";
+            MessageBoxResult messAns = MessageBox.Show(mess, "Save and Overwrite File", MessageBoxButton.YesNoCancel);
 
+            if (messAns == MessageBoxResult.Cancel)
+            {
+                // Abort!
+                return;
+            }
+            else if (messAns == MessageBoxResult.No)
+            {
+                bool tryAgain;
+                do
+                {
+                    // Always reset to false!
+                    tryAgain = false;
+
+                    // Show them a save file dialog
+                    SaveFileDialog saveDiag = new SaveFileDialog();
+                    saveDiag.DefaultExt = ".dat";
+                    saveDiag.Filter = "Data Files|*.dat";
+                    saveDiag.InitialDirectory = System.IO.Path.GetFullPath("Save Files");
+                    saveDiag.OverwritePrompt = true;
+
+                    bool? saveResult = saveDiag.ShowDialog();
+
+                    if (saveResult == true)
+                    {
+                        newFile = saveDiag.FileName;
+                    }
+                    else
+                    {
+                        mess = "You didn't select a new file to save to. Would you like to overwrite your current UnitType.dat?";
+                        messAns = MessageBox.Show(mess, "Did Not Select New File", MessageBoxButton.YesNoCancel);
+                        if (messAns == MessageBoxResult.Cancel)
+                        {
+                            // Bug out!
+                            return;
+                        }
+                        else if (messAns == MessageBoxResult.No)
+                        {
+                            tryAgain = true;
+                        }
+                    }
+                } while (tryAgain);
+
+                // Ok, we've handled the overwrite question, now to try and actually save!
+                try
+                {
+                    MainVM.SaveUnitFile(newFile);
+                }
+                catch (Exception err)
+                {
+                    if (err is UnauthorizedAccessException || err is System.Security.SecurityException)
+                    {
+                        mess = "We cannot write to the specified location due to either limited access or permissions. Please " +
+                            "select a different file location and try again.";
+                        MessageBox.Show(mess, "Could Not Save File", MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        // Those are the only exceptions we're handling
+                        throw err;
+                    }
+                }
+            }
         }
 
         private void UnitBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

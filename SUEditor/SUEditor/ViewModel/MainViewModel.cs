@@ -44,6 +44,7 @@ namespace SUEditor.ViewModel
             // As this is the entry point of the program, we should handle the some amount of
             // file directory work we need done.
             System.IO.Directory.CreateDirectory("Backups"); // Sets up a folder for backup files
+            System.IO.Directory.CreateDirectory("Save Files"); // Sets up a folder for saving files
         }
 
         // Methods
@@ -86,6 +87,28 @@ namespace SUEditor.ViewModel
         {
             // This is really just to expose UnitFile.createBackup to the app at large.
             return MainUnitFile.createBackup(backupLoc, overwrite);
+        }
+
+        /// <summary>
+        /// Save the current unit file to disk. Will overwrite existing file unless newFileLoc is overwritten
+        /// </summary>
+        /// <param name="newFileLoc">Where to save the current unit file. Default is an empty string.
+        /// Will overwrite existing file if not overwritten.</param>
+        public void SaveUnitFile(string newFileLoc = "")
+        {
+            try
+            {
+                if (newFileLoc != "")
+                {
+                    MainUnitFile.SetWriteFile(newFileLoc);
+                }
+                MainUnitFile.saveUnitFile();
+            }
+            catch
+            {
+                // Pass any exceptions to the controlling method
+                throw;
+            }
         }
 
         // Event delegates

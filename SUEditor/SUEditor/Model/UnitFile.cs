@@ -24,11 +24,11 @@ namespace SUEditor.Model
         /// <summary>
         /// The file to be written to
         /// </summary>
-        private string writeFilePath;   //
+        private string writeFilePath;
         /// <summary>
-        /// The name of the file to be read from
+        /// The name of the file to be read from, default save file as well
         /// </summary>
-        private string readFilePath;     // 
+        private string readFilePath;
 
         // Properties
         /// <summary>
@@ -53,8 +53,8 @@ namespace SUEditor.Model
             UnitCount = 0;
             // Unmodified UnitFile.dat contains 86 entries, 100 should limit unnecessary resizing
             UnitDir = new UnitList(100);
-            // Default to true, will be tested for in init()
-            IsWriteProtected = true;
+            // Default to false
+            IsWriteProtected = false;
         }
 
         public UnitFile() :
@@ -169,7 +169,7 @@ namespace SUEditor.Model
         }
 
         /// <summary>
-        /// Saves the current instance of the unit file
+        /// Saves the current instance of the unit file. Can overwrite existing file.
         /// </summary>
         public void saveUnitFile()
         {
@@ -177,14 +177,72 @@ namespace SUEditor.Model
             {
                 try
                 {
+                    // First, setup the header
+                    writer.Write(MAGIC_NUMBER);
+                    writer.Write(UnitDir.Count);
 
+                    Unit tempUnit;  // A simple pointer for the unit we're working with in the loop
+
+                    // This foreach loop will loop through each unit in UnitDir and write them to the file
+                    foreach(UnitFileNode uFile in UnitDir.TheUnits)
+                    {
+                        tempUnit = uFile.TheUnit;
+
+                        writer.Write(tempUnit.DisplayName.ValueBA);
+                        writer.Write(tempUnit.ModelName.ValueBA);
+                        writer.Write(tempUnit.ClassName.ValueBA);
+                        writer.Write(tempUnit.Flag1Or3.Value);
+                        writer.Write(tempUnit.CanBuyFlag.Value);
+                        writer.Write(tempUnit.Cost.Value);
+                        writer.Write(tempUnit.GasTank.Value);
+                        writer.Write(tempUnit.Speed.Value);
+                        writer.Write(tempUnit.AttackRange.Value);
+                        writer.Write(tempUnit.IsIndirect.Value);
+                        writer.Write(tempUnit.IsSingleUse.Value);
+                        writer.Write(tempUnit.IsNotKept.Value);
+                        writer.Write(tempUnit.FlagZero.Value);
+                        writer.Write(tempUnit.Vision.Value);
+                        writer.Write(tempUnit.AirAttack.Value);
+                        writer.Write(tempUnit.ArmorAttack.Value);
+                        writer.Write(tempUnit.InfAttack.Value);
+                        writer.Write(tempUnit.Defense.Value);
+                        writer.Write(tempUnit.CollateralDamage.Value);
+                        writer.Write(tempUnit.HitPoints.Value);
+                        writer.Write(tempUnit.Flag2Zero.Value);
+                        writer.Write(tempUnit.Flag803F.Value);
+                        writer.Write((short)tempUnit.MoveCat);
+                        writer.Write((short)tempUnit.UnitCat);
+                        writer.Write(tempUnit.UnkFlag1.Value);
+                        writer.Write((byte)tempUnit.Faction);
+                        writer.Write(tempUnit.UnkFlag2.Value);
+                        writer.Write(tempUnit.UnkFlag3.Value);
+                        writer.Write(tempUnit.StartsInNEA.Value);
+                        writer.Write(tempUnit.StartsInCon.Value);
+                        writer.Write(tempUnit.StartsInGPF.Value);
+                        writer.Write(tempUnit.StartsInRoT.Value);
+                        writer.Write(tempUnit.StartsInCal.Value);
+                        writer.Write(tempUnit.StartsInPac.Value);
+                        writer.Write(tempUnit.StartsInEU.Value);
+                        writer.Write(tempUnit.StartsInRus.Value);
+                    }
                 }
-                catch
+                catch (Exception err)
                 {
+                    // Just check to see if the file is, effectively, write protected
+                    if (err is UnauthorizedAccessException || err is System.Security.SecurityException)
+                    {
+                        IsWriteProtected = true;
+                    }
                     // Throw it back to the user for proper handling
-                    throw;
+                    throw err;
                 }
             }
+        }
+
+        public void SetWriteFile(string filePath)
+        {
+            writeFilePath = filePath;
+            IsWriteProtected = true;
         }
 
         // Helpers
@@ -268,11 +326,11 @@ namespace SUEditor.Model
         {
             if (IsWriteProtected)
             {
-                return new BinaryWriter(new FileStream(writeFilePath, FileMode.Open, FileAccess.Write));
+                return new BinaryWriter(new FileStream(writeFilePath, FileMode.Create, FileAccess.Write));
             }
             else
             {
-                return new BinaryWriter(new FileStream(readFilePath, FileMode.Open, FileAccess.Write));
+                return new BinaryWriter(new FileStream(readFilePath, FileMode.Create, FileAccess.Write));
             }
         }
     }

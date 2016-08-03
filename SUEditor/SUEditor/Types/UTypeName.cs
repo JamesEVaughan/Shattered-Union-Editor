@@ -41,6 +41,8 @@ namespace SUEditor.Types
             }
         }
 
+        public byte[] ValueBA => data;
+
         public SUEString(char[] ca)
         {
             data = new byte[Size];
