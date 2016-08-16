@@ -158,6 +158,12 @@ namespace SUEditor.ViewModel
             // Mark all following actions as an initial load
             IsInitialLoad = true;
 
+            // Unsubscribe old UnitName
+            if (curUnitName != null)
+            {
+                PropertyChanged -= curUnitName.OnNameChange;
+            }
+
             // And slap all the values where they belong
             // Use the fields because we don't need to propogate PorpChange events
             curUnitName = uName;
@@ -171,6 +177,9 @@ namespace SUEditor.ViewModel
             SightRange = tempy.Vision.Value;
             Cost = tempy.Cost.Value;
             AttRange = tempy.AttackRange.Value;
+
+            // Subscribe new UnitName
+            PropertyChanged += curUnitName.OnNameChange;
 
             // Ok, we can respond to events normally
             IsInitialLoad = false;

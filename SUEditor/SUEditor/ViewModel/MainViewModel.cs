@@ -166,5 +166,16 @@ namespace SUEditor.ViewModel
                     break;
             }
         }
+
+        /// <summary>
+        /// Because MainViewModel isn't fully initialized via its constructor, this tells whoever
+        /// asks if this instance has been fully initialized.
+        /// </summary>
+        /// <returns>True if this instance is initialized and can be used. False otherwise.</returns>
+        public bool IsInitialized()
+        {
+            // The easiest test is if MainUnitFile has been initialized.
+            return !(MainUnitFile == null);
+        }
      }
 }

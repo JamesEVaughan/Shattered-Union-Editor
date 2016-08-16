@@ -20,7 +20,7 @@
         </Menu>
         <!-- Tab Control for the window -->
         <TabControl TabStripPlacement="Top" Margin="10,20,10,10" HorizontalAlignment="Stretch" Grid.RowSpan="6">
-            <TabItem  Header="Unit Editor">
+            <TabItem x:Name="UnitEditor_tab" Header="Unit Editor">
                 <Grid DataContext="{Binding UnitEditor}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50" />
@@ -36,7 +36,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" 
+                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList, Mode=OneWay}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" 
                               VerticalAlignment="Top" Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"
                               IsSynchronizedWithCurrentItem="True" Margin="27,10,0,0" Grid.Row="0" Grid.ColumnSpan="2"/>
                     <Label x:Name="DispName_lbl" Content="Display Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"

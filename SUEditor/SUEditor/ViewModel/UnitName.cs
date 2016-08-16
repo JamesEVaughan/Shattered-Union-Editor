@@ -38,7 +38,7 @@ namespace SUEditor.ViewModel
                 if (value != viewName)
                 {
                     viewName = value;
-                    OnPropertyChanged(ViewName);
+                    OnPropertyChanged("ViewName");
                 }
             }
         }
@@ -56,10 +56,6 @@ namespace SUEditor.ViewModel
         }
 
         // Methods
-        public void subscribeToPropertyChange(PropertyChangedEventHandler othHand)
-        {
-            othHand += ListenForProperty;
-        }
 
         // INotifyPropertyChanged Methods
         protected void OnPropertyChanged(string propName)
@@ -77,9 +73,27 @@ namespace SUEditor.ViewModel
             }
         }
 
-        protected void ListenForProperty(object obj, PropertyChangedEventArgs args)
+        public void OnNameChange (object obj, PropertyChangedEventArgs args)
         {
             // First, we need to be dealing with the right stuff
+            UnitEditorVM tempUE = obj as UnitEditorVM;
+            if (tempUE == null)
+            {
+                // Not what we're looking for
+                return;
+            }
+
+            if (tempUE.IsInitialLoad)
+            {
+                // We're just changing to a different unit, ignore
+                return;
+            }
+
+            // Lastly, we're only looking to undate the name here
+            if (args.PropertyName.Equals("DispName"))
+            {
+                ViewName = tempUE.DispName;
+            }
         }
     }
 }

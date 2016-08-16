@@ -57,10 +57,16 @@ namespace SUEditor
             openFile.Multiselect = false;
             // No reason to show this
             openFile.ShowReadOnly = false;
-            // We should start in the Program Files (x86) directory
+            // We should start in the game's directory, if we can
             openFile.InitialDirectory = Environment.Is64BitOperatingSystem ? 
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) : // If we're 64-bit
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles); // If we're not
+            // Try to set it to the default directory of the game
+            if (System.IO.Directory.Exists(System.IO.Path.Combine(openFile.InitialDirectory, "PopTop Software\\Shattered Union")))
+            {
+                openFile.InitialDirectory = System.IO.Path.Combine(openFile.InitialDirectory, "PopTop Software\\Shattered Union");
+            }
+
             // These bools are for controlling flow because of an exception
             bool tryAgain;   // If the user decides to not try a different file
 
@@ -162,6 +168,20 @@ namespace SUEditor
 
         public void OnSave()
         {
+            // Simple sanity check, if MainVM hasn't been initialized
+            if (!MainVM.IsInitialized())
+            {
+                // Do nothing
+                return;
+            }
+            // Force controls to update that haven't lost focus
+            TextBox tempUEBox = FocusManager.GetFocusedElement(this) as TextBox;
+            if (tempUEBox != null)
+            {
+                // Tell the object to update
+                tempUEBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            }
+
             string newFile = "";
             // First, ask if the user wants to overwrite the existing file
             string mess = "Would you like to overwrite your current UnitTypes.dat?";
@@ -243,6 +263,13 @@ namespace SUEditor
 
         public void OnExit(object obj, ExitEventArgs args)
         {
+            // Simple sanity check, if MainVM hasn't been initialized
+            if (!MainVM.IsInitialized())
+            {
+                // Do nothing
+                return;
+            }
+
             // Check to see if the user wants to save
             string exitMess = "Would you like to save your work before exiting?";
             MessageBoxResult ans = MessageBox.Show(exitMess, "Save before exit", MessageBoxButton.YesNo);
@@ -250,7 +277,7 @@ namespace SUEditor
             // Only do stuff if the ans is yes
             if (ans == MessageBoxResult.Yes)
             {
-                // Run save function.
+                OnSave();
             }
         }
 
