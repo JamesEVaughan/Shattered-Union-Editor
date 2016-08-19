@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+
 using SUEditor.ViewModel;
+using SUEditor.View;
 
 namespace SUEditor
 {
@@ -279,6 +281,19 @@ namespace SUEditor
             {
                 OnSave();
             }
+        }
+
+        public void OnAddUnit(Object obj, EventArgs args)
+        {
+            // For now, just show the dialog
+            AddUnitWindow addDlg = new AddUnitWindow();
+
+            foreach (UnitName uName in MainVM.UnitEditor.NameList)
+            {
+                addDlg.UnitNames.Add(uName.ViewName);
+            }
+
+            addDlg.ShowDialog();
         }
 
     }

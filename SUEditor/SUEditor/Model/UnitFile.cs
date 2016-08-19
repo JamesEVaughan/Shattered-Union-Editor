@@ -125,8 +125,7 @@ namespace SUEditor.Model
                     {
                         // Pull the index from the position of the reader
                         UnitDir.TheUnits.Add(new UnitFileNode(loadUnit((long)tempUnitInd, reader), tempUnitInd));
-
-                        // Simple sanity check
+                        
                         tempUnitInd += 145;
                     }
                 }

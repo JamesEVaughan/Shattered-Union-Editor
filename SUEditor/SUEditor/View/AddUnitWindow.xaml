@@ -1,0 +1,45 @@
+﻿<Window x:Class="SUEditor.View.AddUnitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SUEditor.View"
+        mc:Ignorable="d"
+        Title="AddUnitWindow" Height="200" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="message_txtblk" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch" TextWrapping="Wrap">
+            Because not all attributes for units are known and not all should be edited, the best way to create a new
+            unit is by copying an existing one. <LineBreak/> <LineBreak/> Please select the unit that should serve as 
+            the base for the new unit from the Unit Selection box. Then, provide a name for the new unit in the Unit 
+            Name box. Note: Each unit must have a unique name.
+        </TextBlock>
+
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+               Content="Unit Selection"/>
+        <Label Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+               Content="Unit Name"/>
+
+        <ComboBox x:Name="selection_box" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch" ItemsSource="{Binding UnitNames, Mode=TwoWay, UpdateSourceTrigger=Default}" 
+                  SelectionChanged="selection_change" />
+        <TextBox x:Name="name_txtbox" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch" />
+
+        <Button x:Name="ok_btn" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Content="Okay" Click="ok_click" />
+    </Grid>
+</Window>

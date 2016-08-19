@@ -65,7 +65,7 @@ namespace SUEditor.ViewModel
                 // Now that we've initialized the file, pull out the names for each unit
                 foreach (UnitFileNode node in MainUnitFile.UnitDir.TheUnits)
                 {
-                    UnitEditor.NameList.Add(new UnitName(node.TheUnit));
+                    UnitEditor.NameList.Add(new UnitName(node.TheUnit, node.Index));
                 }
             }
             catch (SUE_InvalidFileException ivfe)

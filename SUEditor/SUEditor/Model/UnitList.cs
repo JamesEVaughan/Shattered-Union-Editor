@@ -65,5 +65,19 @@ namespace SUEditor.Model
 
             return uFactList;
         }
+
+        /// <summary>
+        /// Clones the specified unit, adding it to TheUnits
+        /// </summary>
+        /// <param name="un">Instance of Unit to be cloned</param>
+        /// <param name="newName">The DispName the newly cloned instance will have</param>
+        public void CloneUnit(Unit un, string newName)
+        {
+            Unit tempUnit = new Unit(un);   // Copy un to tempUnit
+            long newInd = TheUnits[TheUnits.Count - 1].Index + 145; // Get the next available index
+            tempUnit.DisplayName = new Types.SUEString(newName);
+
+            TheUnits.Add(new UnitFileNode(tempUnit, newInd));
+        }
     }
 }

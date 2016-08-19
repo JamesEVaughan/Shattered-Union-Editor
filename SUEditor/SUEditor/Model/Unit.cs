@@ -94,6 +94,9 @@ namespace SUEditor.Model
             DisplayName = new SUEString(dn);
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Unit()
         {
             DisplayName = new SUEString();
@@ -124,6 +127,49 @@ namespace SUEditor.Model
             Faction = UnitFaction.NEA;  // Default to first UnitFaction value
             UnkFlag2 = 0;
             UnkFlag3 = 0;
+        }
+        /// <summary>
+        /// Full copy constructor
+        /// </summary>
+        /// <param name="oth"></param>
+        public Unit(Unit oth)
+        {
+            DisplayName = oth.DisplayName;
+            ModelName = oth.ModelName;
+            ClassName = oth.ClassName;
+            Flag1Or3 = oth.Flag1Or3;
+            CanBuyFlag = oth.CanBuyFlag;
+            Cost = oth.Cost;
+            GasTank = oth.GasTank;
+            Speed = oth.Speed;
+            AttackRange = oth.AttackRange;
+            IsIndirect = oth.IsIndirect;
+            IsSingleUse = oth.IsSingleUse;
+            IsNotKept = oth.IsNotKept;
+            FlagZero = oth.FlagZero;
+            Vision = oth.Vision;
+            AirAttack = oth.AirAttack;
+            ArmorAttack = oth.ArmorAttack;
+            InfAttack = oth.InfAttack;
+            Defense = oth.Defense;
+            CollateralDamage = oth.CollateralDamage;
+            HitPoints = oth.HitPoints;
+            Flag2Zero = oth.Flag2Zero;
+            Flag803F = oth.Flag803F;
+            MoveCat = oth.MoveCat;
+            UnitCat = oth.UnitCat;
+            UnkFlag1 = oth.UnkFlag1;
+            Faction = oth.Faction;  // Default to first UnitFaction value
+            UnkFlag2 = oth.UnkFlag2;
+            UnkFlag3 = oth.UnkFlag3;
+            StartsInNEA = oth.StartsInNEA;
+            StartsInCon = oth.StartsInCon;
+            StartsInGPF = oth.StartsInGPF;
+            StartsInRoT = oth.StartsInRoT;
+            StartsInCal = oth.StartsInCal;
+            StartsInPac = oth.StartsInPac;
+            StartsInEU = oth.StartsInEU;
+            StartsInRus = oth.StartsInRus;
         }
     }
 }

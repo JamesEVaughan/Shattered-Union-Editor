@@ -17,12 +17,19 @@ namespace SUEditor.ViewModel
     public class UnitName : INotifyPropertyChanged
     {
         // Fields
+        /// <summary>
+        /// A reference back to the Unit this represents
+        /// </summary>
         private Unit theUnit;
         /// <summary>
         /// This is the name that is displayed by the app. Acts as field behind the ViewName
         /// property.
         /// </summary>
         private string viewName;
+        /// <summary>
+        /// File index of theUnit. Used for finding it in the UnitList
+        /// </summary>
+        private long index;
 
         // Properties
         /// <summary>
@@ -48,11 +55,17 @@ namespace SUEditor.ViewModel
             get { return theUnit; }
         }
 
+        public long Index
+        {
+            get { return index; }
+        }
+
         // Constructors
-        public UnitName(Unit u)
+        public UnitName(Unit u, long ind)
         {
             theUnit = u;
             viewName = u.DisplayName.Value;
+            index = ind;
         }
 
         // Methods
@@ -89,7 +102,7 @@ namespace SUEditor.ViewModel
                 return;
             }
 
-            // Lastly, we're only looking to undate the name here
+            // Lastly, we're only looking to update the name here
             if (args.PropertyName.Equals("DispName"))
             {
                 ViewName = tempUE.DispName;

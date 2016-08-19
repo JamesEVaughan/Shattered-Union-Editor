@@ -59,6 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MainConsoleTester.cs" />
+    <Compile Include="Model\SUE_UnitNotFoundException.cs" />
     <Compile Include="Model\UnitFactNode.cs" />
     <Compile Include="Model\UnitList.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -72,6 +73,10 @@
     <Compile Include="Model\UnitFile.cs" />
     <Compile Include="Model\UnitFileNode.cs" />
     <Compile Include="ViewModel\UnitEditorVM.cs" />
+    <Page Include="View\AddUnitWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,6 +86,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModel\UnitName.cs" />
+    <Compile Include="View\AddUnitWindow.xaml.cs">
+      <DependentUpon>AddUnitWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

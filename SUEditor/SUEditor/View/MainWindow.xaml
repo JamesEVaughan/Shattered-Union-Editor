@@ -29,6 +29,7 @@
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -95,6 +96,9 @@
                     <TextBox x:Name="Sight_txt" Text="{Binding SightRange, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
                              Grid.Row="5" Grid.Column="3"/>
+
+                    <Button x:Name="addunit_btn" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" Click="OnAddUnit" Content="Add New Unit" />
                 </Grid>
             </TabItem>
         </TabControl>
