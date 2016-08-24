@@ -71,13 +71,17 @@ namespace SUEditor.Model
         /// </summary>
         /// <param name="un">Instance of Unit to be cloned</param>
         /// <param name="newName">The DispName the newly cloned instance will have</param>
-        public void CloneUnit(Unit un, string newName)
+        /// <returns>The index of the unit in the file</returns>
+        public long CloneUnit(Unit un, string newName)
         {
             Unit tempUnit = new Unit(un);   // Copy un to tempUnit
             long newInd = TheUnits[TheUnits.Count - 1].Index + 145; // Get the next available index
             tempUnit.DisplayName = new Types.SUEString(newName);
 
             TheUnits.Add(new UnitFileNode(tempUnit, newInd));
+
+            // Finaly, return the index of the new unit
+            return newInd;
         }
     }
 }

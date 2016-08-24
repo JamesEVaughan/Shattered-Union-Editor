@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SUEditor"
         xmlns:vm="clr-namespace:SUEditor.ViewModel"
+        xmlns:v="clr-namespace:SUEditor.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="528" Width="672">
-
-
     <Grid>
         <!-- Menu bar -->
         <Menu Margin="0" Grid.RowSpan="6">
@@ -37,15 +36,23 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList, Mode=OneWay}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" 
+                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" 
                               VerticalAlignment="Top" Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"
                               IsSynchronizedWithCurrentItem="True" Margin="27,10,0,0" Grid.Row="0" Grid.ColumnSpan="2"/>
                     <Label x:Name="DispName_lbl" Content="Display Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
                            Grid.Row="0" Grid.Column="2"/>
-                    <TextBox Name="DisplayName_txt" Text="{Binding DispName, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                    <TextBox Name="DisplayName_txt" 
                              HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="30" Margin="10" 
-                             Grid.Row="0" Grid.Column="3"/>
-                    
+                             Grid.Row="0" Grid.Column="3">
+                        <TextBox.Text>
+                            <Binding Path="DispName" UpdateSourceTrigger="LostFocus" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <v:ValidateDisplayName x:Name="DispVal"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
                     <Label x:Name="Attack_lbl" Content="Attack Values" Height="30" HorizontalAlignment="Center"
                            VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" />
                     <Label x:Name="Cost_lbl" Content="Cost (in $1,000)" Height="30" Margin="10" 
@@ -63,7 +70,7 @@
                     <TextBox x:Name="Health_txt" Text="{Binding Health, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
                              Grid.Row="2" Grid.Column="3"/>
-                    
+
                     <Label x:Name="VehAtt_lbl" Content="Vehicle" Height="30" Margin="10"
                            Grid.Row="3" Grid.Column="0"/>
                     <TextBox x:Name="VehAtt_txt" Text="{Binding VehAtt, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
@@ -85,7 +92,7 @@
                     <TextBox x:Name="Move_txt" Text="{Binding Movement, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
                              Grid.Row="4" Grid.Column="3"/>
-                    
+
                     <Label x:Name="AttRange_lbl" Content="Attack Range" Height="30" Margin="10" 
                            Grid.Row="5" Grid.Column="0"/>
                     <TextBox x:Name="AttRange_txt" Text="{Binding AttRange, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 

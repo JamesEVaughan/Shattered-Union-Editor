@@ -111,6 +111,27 @@ namespace SUEditor.ViewModel
             }
         }
 
+        /// <summary>
+        /// Adds a new unit to the unit file
+        /// </summary>
+        /// <param name="unInd">The index of the unit to be cloned</param>
+        /// <param name="newName">The name of the unit</param>
+        public void AddUnit(int unInd, string newName)
+        {
+            // First, find the unit to be cloned
+            Unit tempy = UnitEditor.NameList[unInd].TheUnit;
+
+            // Pass the info to MainUnitFile
+            long tempInd = MainUnitFile.UnitDir.CloneUnit(tempy, newName);
+
+            // Now set tempy to the newly formed unit
+            tempy = MainUnitFile.UnitDir.TheUnits.Find(x => x.Index == tempInd).TheUnit;
+
+            // Now, if everything went right, we should have a new unit in UnitDir
+            // Add it to UnitEditorVM
+            UnitEditor.NameList.Add(new UnitName(tempy, tempInd));
+        }
+
         // Event delegates
         protected void OnUnitTabChange(object obj, EventArgs args)
         {

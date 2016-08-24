@@ -41,6 +41,7 @@ namespace SUEditor
 
             // Subscribe to any events we haven't with our ViewModel
             App.Current.Exit += OnExit;
+
         }
 
         /// <summary>
@@ -160,6 +161,8 @@ namespace SUEditor
 
                 } while (tryAgain);
             }
+
+            DispVal.CurUnits = MainVM.UnitEditor.NameList;
         }
 
         public void SaveClick(object obj, EventArgs e)
@@ -285,15 +288,23 @@ namespace SUEditor
 
         public void OnAddUnit(Object obj, EventArgs args)
         {
-            // For now, just show the dialog
-            AddUnitWindow addDlg = new AddUnitWindow();
-
-            foreach (UnitName uName in MainVM.UnitEditor.NameList)
+            // Quickly build the array of strings\
+            int tempCount = MainVM.UnitEditor.NameList.Count;
+            string[] tempNames = new string[tempCount];
+            for (int i = 0; i < tempCount; i++)
             {
-                addDlg.UnitNames.Add(uName.ViewName);
+                tempNames[i] = MainVM.UnitEditor.NameList[i].ViewName;
             }
+            AddUnitWindow addDlg = new AddUnitWindow(tempNames);
 
-            addDlg.ShowDialog();
+
+            bool? addRes = addDlg.ShowDialog();
+
+            // Push results if the user hit "Okay"
+            if (addRes == true)
+            {
+                MainVM.AddUnit(addDlg.UnitIndex, addDlg.NewUnitName);
+            }
         }
 
     }

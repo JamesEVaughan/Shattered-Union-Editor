@@ -73,6 +73,7 @@
     <Compile Include="Model\UnitFile.cs" />
     <Compile Include="Model\UnitFileNode.cs" />
     <Compile Include="ViewModel\UnitEditorVM.cs" />
+    <Compile Include="View\ValidateDisplayName.cs" />
     <Page Include="View\AddUnitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SUEditor.View"
         mc:Ignorable="d"
-        Title="AddUnitWindow" Height="200" Width="400">
+        Title="AddUnitWindow" Height="250" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*" />
@@ -34,12 +34,11 @@
                Content="Unit Name"/>
 
         <ComboBox x:Name="selection_box" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch" ItemsSource="{Binding UnitNames, Mode=TwoWay, UpdateSourceTrigger=Default}" 
-                  SelectionChanged="selection_change" />
+                  VerticalAlignment="Stretch" ItemsSource="{Binding UnitNames}" SelectionChanged="selection_change" />
         <TextBox x:Name="name_txtbox" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch" />
 
         <Button x:Name="ok_btn" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Content="Okay" Click="ok_click" />
+                Content="Okay" Click="ok_click" IsDefault="True"/>
     </Grid>
 </Window>

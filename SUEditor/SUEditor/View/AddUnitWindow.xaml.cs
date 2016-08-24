@@ -26,7 +26,7 @@ namespace SUEditor.View
         /// <summary>
         /// A list of the names of units available to be copied
         /// </summary>
-        public BindingList<string> UnitNames { get; set; }
+        public List<string> UnitNames { get; set; }
         /// <summary>
         /// The name for the new unit, defaults to ""
         /// </summary>
@@ -36,24 +36,26 @@ namespace SUEditor.View
         /// </summary>
         public int UnitIndex { get; private set; }
 
-        public AddUnitWindow()
+        /// <summary>
+        /// Default constructor, don't use
+        /// </summary>
+        public AddUnitWindow(string[] names)
         {
-            InitializeComponent();
+            // Set the DataContext to this instance
+            DataContext = this;
 
             // Default to an empty list
-            UnitNames = new BindingList<string>();
+            UnitNames = new List<string>(names);
             NewUnitName = "";
             UnitIndex = -1;
+
+            // Once everything is set, initialize our components
+            InitializeComponent();
+
+
         }
 
         // Methods
-        /// <summary>
-        /// Dirty, dirty hack to make the list update
-        /// </summary>
-        public void UpdateHack()
-        {
-
-        }
 
         // Event handlers
         public void ok_click(object obj, EventArgs args)
@@ -62,7 +64,11 @@ namespace SUEditor.View
 
             // Set the properties before we close
             UnitIndex = selection_box.SelectedIndex;
+            // This only really needs to be done once, so no reason to wire it up
             NewUnitName = name_txtbox.Text;
+
+            // So this should close the window...
+            DialogResult = true;
         }
 
         public void selection_change(Object obj, EventArgs args)
