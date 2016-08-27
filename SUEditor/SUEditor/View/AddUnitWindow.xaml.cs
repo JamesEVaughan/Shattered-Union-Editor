@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 using SUEditor.ViewModel;
 
@@ -26,31 +27,34 @@ namespace SUEditor.View
         /// <summary>
         /// A list of the names of units available to be copied
         /// </summary>
-        public List<string> UnitNames { get; set; }
+        public string[] UnitNames { get; set; }
         /// <summary>
         /// The name for the new unit, defaults to ""
         /// </summary>
-        public string NewUnitName { get; private set; }
+        public NotifyString NewUnitName { get; private set; }
         /// <summary>
         /// The index of the unit to be copied, defaults to -1
         /// </summary>
         public int UnitIndex { get; private set; }
 
         /// <summary>
-        /// Default constructor, don't use
+        /// Sets up our dialog window
         /// </summary>
+        /// <param name="names">An array of strings for the names for all units</param>
+        /// <param name="nameRules">The validation rules to be used</param>
         public AddUnitWindow(string[] names)
         {
             // Set the DataContext to this instance
             DataContext = this;
 
-            // Default to an empty list
-            UnitNames = new List<string>(names);
-            NewUnitName = "";
+            UnitNames = names;
+            NewUnitName = new NotifyString();
             UnitIndex = -1;
 
             // Once everything is set, initialize our components
             InitializeComponent();
+
+            //NameRules = new ValidateDisplayName(names);
 
 
         }
@@ -64,17 +68,72 @@ namespace SUEditor.View
 
             // Set the properties before we close
             UnitIndex = selection_box.SelectedIndex;
-            // This only really needs to be done once, so no reason to wire it up
-            NewUnitName = name_txtbox.Text;
 
             // So this should close the window...
             DialogResult = true;
         }
 
+        public void can_click(object obj, EventArgs args)
+        {
+            DialogResult = false;
+        }
+
         public void selection_change(Object obj, EventArgs args)
         {
             // Set the value of the textbox to the selection
-            name_txtbox.Text = selection_box.SelectedValue as string;
+            NewUnitName.Val = selection_box.SelectedValue as string;
+        }
+    }
+
+    /// <summary>
+    /// A wrapper class for a string that implements INotifyPropertyChanged
+    /// </summary>
+    public class NotifyString : INotifyPropertyChanged
+    {
+        private string val;
+
+        public string Val
+        {
+            get
+            {
+                return val;
+            }
+
+            set
+            {
+                val = value;
+                OnPropertyChanged("Val");
+            }
+        }
+
+        public NotifyString()
+        {
+            val = "";
+        }
+
+        // Events
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public override string ToString()
+        {
+            return val;
+        }
+
+        // INotifyProperyChanged implementation
+        // INotifyPropertyChanged implmentation
+        protected void OnPropertyChanged(String propName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propName));
+        }
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            PropertyChangedEventHandler hand = PropertyChanged;
+
+            if (hand != null)
+            {
+                hand(this, args);
+            }
         }
     }
 }

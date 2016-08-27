@@ -8,6 +8,24 @@
         xmlns:v="clr-namespace:SUEditor.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="528" Width="672">
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidErr">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20">!</TextBlock>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+        
+        <Style x:Key="ExplainValidErr" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <!-- Menu bar -->
         <Menu Margin="0" Grid.RowSpan="6">
@@ -19,6 +37,7 @@
         </Menu>
         <!-- Tab Control for the window -->
         <TabControl TabStripPlacement="Top" Margin="10,20,10,10" HorizontalAlignment="Stretch" Grid.RowSpan="6">
+
             <TabItem x:Name="UnitEditor_tab" Header="Unit Editor">
                 <Grid DataContext="{Binding UnitEditor}">
                     <Grid.RowDefinitions>
@@ -32,18 +51,20 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName" HorizontalAlignment="Left" 
-                              VerticalAlignment="Top" Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"
-                              IsSynchronizedWithCurrentItem="True" Margin="27,10,0,0" Grid.Row="0" Grid.ColumnSpan="2"/>
-                    <Label x:Name="DispName_lbl" Content="Display Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                    <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName"
+                              Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"
+                              IsSynchronizedWithCurrentItem="True" Margin="10" Grid.Row="0" Grid.ColumnSpan="2"/>
+                    <Label x:Name="DispName_lbl" Content="Display Name" Height="30" HorizontalContentAlignment="Center"
                            Grid.Row="0" Grid.Column="2"/>
-                    <TextBox Name="DisplayName_txt" 
+                    <TextBox Name="DisplayName_txt" Validation.ErrorTemplate="{StaticResource ValidErr}"
                              HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="30" Margin="10" 
-                             Grid.Row="0" Grid.Column="3">
+                             Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource ExplainValidErr}">
                         <TextBox.Text>
                             <Binding Path="DispName" UpdateSourceTrigger="LostFocus" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -52,62 +73,89 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
+                    <Button x:Name="addunit_btn" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" Click="OnAddUnit" Content="Add New Unit" Margin="10" />
 
-                    <Label x:Name="Attack_lbl" Content="Attack Values" Height="30" HorizontalAlignment="Center"
-                           VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" />
-                    <Label x:Name="Cost_lbl" Content="Cost (in $1,000)" Height="30" Margin="10" 
-                           Grid.Row="1" Grid.Column="2"/>
+
+                    <Label x:Name="Cost_lbl" Content="Cost" Height="30" HorizontalContentAlignment="Center" 
+                           Grid.Row="1" Grid.Column="0"/>
                     <TextBox x:Name="Cost_txt" Text="{Binding Cost, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
+                             Grid.Row="1" Grid.Column="1">
+                    </TextBox>
+                    <Label x:Name="Health_lbl" Content="Hit Points" Height="30" HorizontalContentAlignment="Center" 
+                           Grid.Row="1" Grid.Column="2"/>
+                    <TextBox x:Name="Health_txt" Text="{Binding Health, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
+                             Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
                              Grid.Row="1" Grid.Column="3"/>
+                    <Label x:Name="Def_lbl" Content="Defense" Height="30" HorizontalContentAlignment="Center"
+                           Grid.Row="1" Grid.Column="4"/>
+                    <TextBox x:Name="Def_txt" Text="{Binding Def, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
+                             Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
+                             Grid.Row="1" Grid.Column="5"/>
 
-                    <Label x:Name="InfAtt_lbl" Content="Infantry" Height="30" Margin="10"
+                    <Label x:Name="InfAtt_lbl" Content="Infantry Attack" Height="30" HorizontalContentAlignment="Center"
                            Grid.Row="2" Grid.Column="0"/>
                     <TextBox x:Name="InfAtt_txt" Text="{Binding InfAtt, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Height="30" 
                              HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" Grid.Row="2" Grid.Column="1"/>
-                    <Label x:Name="Health_lbl" Content="Hit Points" Height="30" Margin="10" 
+                    <Label x:Name="VehAtt_lbl" Content="Vehicle Attack" Height="30" HorizontalContentAlignment="Center"
                            Grid.Row="2" Grid.Column="2"/>
-                    <TextBox x:Name="Health_txt" Text="{Binding Health, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
-                             Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
-                             Grid.Row="2" Grid.Column="3"/>
-
-                    <Label x:Name="VehAtt_lbl" Content="Vehicle" Height="30" Margin="10"
-                           Grid.Row="3" Grid.Column="0"/>
                     <TextBox x:Name="VehAtt_txt" Text="{Binding VehAtt, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
                              HorizontalAlignment="Stretch" Height="30" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top" 
-                             Grid.Row="3" Grid.Column="1"/>
-                    <Label x:Name="Def_lbl" Content="Defense" Height="30" Margin="10" 
-                           Grid.Row="3" Grid.Column="2"/>
-                    <TextBox x:Name="Def_txt" Text="{Binding Def, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
-                             Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
-                             Grid.Row="3" Grid.Column="3"/>
-
-                    <Label x:Name="AirAtt_lbl" Content="Air" Height="30" Margin="10" 
-                           Grid.Row="4" Grid.Column="0"/>
+                             Grid.Row="2" Grid.Column="3"/>
+                    <Label x:Name="AirAtt_lbl" Content="Air Attack" Height="30"  HorizontalContentAlignment="Center"
+                           Grid.Row="2" Grid.Column="4"/>
                     <TextBox x:Name="AirAtt_txt" Text="{Binding AirAtt, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
                              HorizontalAlignment="Stretch" Height="30" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top" 
-                             Grid.Row="4" Grid.Column="1"/>
-                    <Label x:Name="Move_lbl" Content="Movement" Height="30" Margin="10" 
-                           Grid.Row="4" Grid.Column="2"/>
+                             Grid.Row="2" Grid.Column="5"/>
+
+                    <Label x:Name="Move_lbl" Content="Movement" Height="30" HorizontalContentAlignment="Center"
+                           Grid.Row="3" Grid.Column="0"/>
                     <TextBox x:Name="Move_txt" Text="{Binding Movement, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
-                             Grid.Row="4" Grid.Column="3"/>
-
-                    <Label x:Name="AttRange_lbl" Content="Attack Range" Height="30" Margin="10" 
-                           Grid.Row="5" Grid.Column="0"/>
+                             Grid.Row="3" Grid.Column="1"/>
+                    <Label x:Name="AttRange_lbl" Content="Attack Range" Height="30" HorizontalContentAlignment="Center" 
+                           Grid.Row="3" Grid.Column="2"/>
                     <TextBox x:Name="AttRange_txt" Text="{Binding AttRange, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
                              HorizontalAlignment="Stretch" Height="30" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top" 
-                             Grid.Row="5" Grid.Column="1"/>
-                    <Label x:Name="Sight_lbl" Content="Sight Range" Height="30" Margin="10" 
-                           Grid.Row="5" Grid.Column="2"/>
+                             Grid.Row="3" Grid.Column="3"/>
+                    <Label x:Name="Sight_lbl" Content="Sight Range" Height="30" HorizontalContentAlignment="Center"
+                           Grid.Row="3" Grid.Column="4"/>
                     <TextBox x:Name="Sight_txt" Text="{Binding SightRange, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
-                             Grid.Row="5" Grid.Column="3"/>
+                             Grid.Row="3" Grid.Column="5"/>
 
-                    <Button x:Name="addunit_btn" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch" Click="OnAddUnit" Content="Add New Unit" />
+                    <Label x:Name="Fuel_lbl" Content="Max Fuel" Height="30" HorizontalContentAlignment="Center"
+                            Grid.Row="4" Grid.Column="0"/>
+                    <TextBox x:Name="Fuel_txt" Text="{Binding Fuel, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
+                            Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
+                            Grid.Row="4" Grid.Column="1"/>
+                    <Label x:Name="CollDam_lbl" Content="Collateral Damage" Height="30" HorizontalContentAlignment="Center"
+                            Grid.Row="4" Grid.Column="2"/>
+                    <TextBox x:Name="CollDam_txt" Text="{Binding CollDamage, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
+                            Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
+                            Grid.Row="4" Grid.Column="3"/>
+                    <Label x:Name="CanBuy_lbl" Content="Can this unit be bought?" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2"/>
+                    <CheckBox x:Name="CanBuy_chkbox" IsChecked="{Binding CanBuy, Mode=TwoWay}" HorizontalAlignment="Right" 
+                              Margin="10" Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" />
+
+                    <Label x:Name="Indir_lbl" Content="Is this an indirect fire unit?" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <CheckBox x:Name="Indir_chkbox" IsChecked="{Binding IsIndirect, Mode=TwoWay}" HorizontalAlignment="Right" 
+                              Margin="10" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
+                    <Label x:Name="IsSingle_lbl" Content="Is this a Single Use unit?" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <CheckBox x:Name="IsSingle_chkbox" IsChecked="{Binding IsSingleUse, Mode=TwoWay}" HorizontalAlignment="Right" 
+                              Margin="10" Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" />
+                    <Label x:Name="IsNotKept_lbl" Content="Is this deleted after battle?" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2"/>
+                    <CheckBox x:Name="IsNotKept_chkbox" IsChecked="{Binding IsNotKept, Mode=TwoWay}" HorizontalAlignment="Right" 
+                              Margin="10" Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" />
                 </Grid>
+                
             </TabItem>
         </TabControl>
     </Grid>
+    
 </Window>

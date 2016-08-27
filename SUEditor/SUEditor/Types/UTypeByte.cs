@@ -46,6 +46,17 @@ namespace SUEditor.Types
             return new SUEByte(b);
         }
 
+        // Implicitly convert booleans as well
+        public static implicit operator bool(SUEByte sueb)
+        {
+            return (sueb.Value != 0);
+        }
+
+        public static implicit operator SUEByte(bool boo)
+        {
+            return new SUEByte((byte)(boo ? 1 : 0));
+        }
+
         /// Implementation of IEquatable
         public bool Equals(SUEByte other)
         {

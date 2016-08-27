@@ -185,6 +185,24 @@ namespace SUEditor.ViewModel
                 case "AttRange":
                     tempUE.CurUnitName.TheUnit.AttackRange.Value = tempUE.AttRange;
                     break;
+                case "Fuel":
+                    tempUE.CurUnitName.TheUnit.GasTank.Value = tempUE.Fuel;
+                    break;
+                case "CollDamage":
+                    tempUE.CurUnitName.TheUnit.CollateralDamage.Value = tempUE.CollDamage;
+                    break;
+                case "IsIndirect":
+                    tempUE.CurUnitName.TheUnit.IsIndirect = tempUE.IsIndirect;
+                    break;
+                case "IsSingleUse":
+                    tempUE.CurUnitName.TheUnit.IsSingleUse = tempUE.IsSingleUse;
+                    break;
+                case "IsNotKept":
+                    tempUE.CurUnitName.TheUnit.IsNotKept = tempUE.IsNotKept;
+                    break;
+                case "CanBuy":
+                    tempUE.CurUnitName.TheUnit.CanBuyFlag = tempUE.CanBuy;
+                    break;
             }
         }
 

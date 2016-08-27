@@ -16,7 +16,7 @@ namespace SUEditor.Model
         // Properties
         /// <summary> The unit's name displayed in game </summary>
         public SUEString DisplayName { get; set; }
-            /// <summary> The model the unit uses in game </summary>
+        /// <summary> The model the unit uses in game </summary>
         public SUEString ModelName { get; set; }
         /// <summary> The class used by the game engine </summary>
         public SUEString ClassName { get; set; }

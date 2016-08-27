@@ -28,6 +28,13 @@ namespace SUEditor.ViewModel
         private short def;
         private short health;
         private short attRange;
+        private int fuel;
+        private short collDamage;
+        private bool isIndirect;
+        private bool isSingleUse;
+        private bool isNotKept;
+        private bool canBuy;
+
 
         // Properties
         /// <summary>
@@ -126,6 +133,62 @@ namespace SUEditor.ViewModel
                 OnPropertyChanged("AttRange");
             }
         }
+
+        public int Fuel
+        {
+            get { return fuel; }
+            set
+            {
+                fuel = value;
+                OnPropertyChanged("Fuel");
+            }
+        }
+        public short CollDamage
+        {
+            get { return collDamage; }
+            set
+            {
+                collDamage = value;
+                OnPropertyChanged("CollDamage");
+            }
+        }
+        public bool IsIndirect
+        {
+            get { return isIndirect; }
+            set
+            {
+                isIndirect = value;
+                OnPropertyChanged("IsIndirect");
+            }
+        }
+        public bool IsSingleUse
+        {
+            get { return isSingleUse; }
+            set
+            {
+                isSingleUse = value;
+                OnPropertyChanged("IsSingleUse");
+            }
+        }
+        public bool IsNotKept
+        {
+            get { return isNotKept; }
+            set
+            {
+                isNotKept = value;
+                OnPropertyChanged("IsNotKept");
+            }
+        }
+        public bool CanBuy
+        {
+            get { return canBuy; }
+            set
+            {
+                canBuy = value;
+                OnPropertyChanged("CanBuy");
+            }
+        }
+
         /// <summary>
         /// This is a reference back to the currently selected UnitName from the list
         /// </summary>
@@ -165,7 +228,6 @@ namespace SUEditor.ViewModel
             }
 
             // And slap all the values where they belong
-            // Use the fields because we don't need to propogate PorpChange events
             curUnitName = uName;
             DispName = tempy.DisplayName.Value;
             Health = tempy.HitPoints.Value;
@@ -177,6 +239,15 @@ namespace SUEditor.ViewModel
             SightRange = tempy.Vision.Value;
             Cost = tempy.Cost.Value;
             AttRange = tempy.AttackRange.Value;
+
+            // New additions!
+            Fuel = tempy.GasTank.Value;
+            CollDamage = tempy.CollateralDamage.Value;
+
+            IsIndirect = tempy.IsIndirect;
+            IsSingleUse = tempy.IsSingleUse;
+            IsNotKept = tempy.IsNotKept;
+            CanBuy = tempy.CanBuyFlag;
 
             // Subscribe new UnitName
             PropertyChanged += curUnitName.OnNameChange;

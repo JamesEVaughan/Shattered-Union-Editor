@@ -162,7 +162,9 @@ namespace SUEditor
                 } while (tryAgain);
             }
 
-            DispVal.CurUnits = MainVM.UnitEditor.NameList;
+            // Here, we do final setup of the validation rules
+            DispVal.SetUnitList(MainVM.UnitEditor.NameList);
+            UnitBox.SelectionChanged += DispVal.OnSelectionChange;
         }
 
         public void SaveClick(object obj, EventArgs e)
@@ -295,15 +297,18 @@ namespace SUEditor
             {
                 tempNames[i] = MainVM.UnitEditor.NameList[i].ViewName;
             }
+
             AddUnitWindow addDlg = new AddUnitWindow(tempNames);
 
+            // And don't forget to pass along the ValidationRules!
+            addDlg.NameRules.SetUnitList(MainVM.UnitEditor.NameList);
 
             bool? addRes = addDlg.ShowDialog();
 
             // Push results if the user hit "Okay"
             if (addRes == true)
             {
-                MainVM.AddUnit(addDlg.UnitIndex, addDlg.NewUnitName);
+                MainVM.AddUnit(addDlg.UnitIndex, addDlg.NewUnitName.Val);
             }
         }
 

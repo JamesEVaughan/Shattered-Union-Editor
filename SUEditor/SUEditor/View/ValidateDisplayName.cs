@@ -17,31 +17,53 @@ namespace SUEditor.View
         /// <summary>
         /// A pointer to the current list of units
         /// </summary>
-        public ObservableCollection<UnitName> CurUnits { get; set; }
+        public List<string> CurUnits { get; private set; }
+
+        /// <summary>
+        /// The currently selected unit
+        /// </summary>
+        public string SelectedUnit { get; private set; }
 
         // Constructors
 
         public ValidateDisplayName()
         {
+            // It's the user's responsibility to set CurUnits
+            CurUnits = null;
+            SelectedUnit = null;
+        }
 
+        // Simple copy constructor
+        public ValidateDisplayName(string[] names)
+        {
+            CurUnits = new List<string>(names.Length);
+            SelectedUnit = null;
+
+            foreach (string unit in names)
+            {
+                CurUnits.Add(String.Copy(unit));
+            }
         }
 
         /// <summary>
-        /// Sets up our ValidationRule for DisplayNames
+        /// Sets the list of names, CurUnits, given a list of UnitNames
         /// </summary>
-        /// <param name="theList">The active list of units</param>
-        public ValidateDisplayName(ObservableCollection<UnitName> theList)
+        /// <param name="names">A collection of UnitNames in an IEnumerable collection</param>
+        public void SetUnitList(IEnumerable<UnitName> names)
         {
-            // It's just a pointer, so simple assigned is fine
-            CurUnits = theList;
+            CurUnits = new List<string>(100);
+            foreach (UnitName uName in names)
+            {
+                CurUnits.Add(uName.ViewName);
+            }
         }
 
         // Implementation of ValidationRule
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            // First, value should be a string
+            // First, value should be a string and have contain something
             string temp = value as string;
-            if (temp == null)
+            if (temp == null || temp == "")
             {
                 // Prolly a stupid check, but it needs to be done.
                 return new ValidationResult(false, "Value is not a string.");
@@ -71,9 +93,9 @@ namespace SUEditor.View
             }
 
             // Lastly, check to make sure it's unique
-            foreach (UnitName uName in CurUnits)
+            foreach (string name in CurUnits)
             {
-                if (temp.Equals(uName.ViewName))
+                if (temp.Equals(name) && !temp.Equals(SelectedUnit))
                 {
                     return new ValidationResult(false, "Unit already exists with this name.");
                 }
@@ -81,6 +103,25 @@ namespace SUEditor.View
 
             // If it passes all that, it's good to go
             return new ValidationResult(true, null);
+        }
+
+        // Event delegates
+        public void OnSelectionChange(object sender, SelectionChangedEventArgs args)
+        {
+            ComboBox tempCB = sender as ComboBox;
+            
+            if (tempCB == null)
+            {
+                // It wasn't a combobox, ignore
+                return;
+            }
+
+            // Now, make sure it's a valid selection for us
+            if (tempCB.SelectedItem is UnitName)
+            {
+                // And set it
+                SelectedUnit = (tempCB.SelectedItem as UnitName).ViewName;
+            }
         }
 
     }
