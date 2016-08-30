@@ -34,6 +34,9 @@ namespace SUEditor.ViewModel
         private bool isSingleUse;
         private bool isNotKept;
         private bool canBuy;
+        private UnitMovementClass moveType;
+        private UnitArmorClass armorType;
+        private UnitFaction faction;
 
 
         // Properties
@@ -188,6 +191,33 @@ namespace SUEditor.ViewModel
                 OnPropertyChanged("CanBuy");
             }
         }
+        public UnitMovementClass MoveType
+        {
+            get { return moveType; }
+            set
+            {
+                moveType = value;
+                OnPropertyChanged("MoveType");
+            }
+        }
+        public UnitArmorClass ArmorType
+        {
+            get { return armorType; }
+            set
+            {
+                armorType = value;
+                OnPropertyChanged("ArmorType");
+            }
+        }
+        public UnitFaction Faction
+        {
+            get { return faction; }
+            set
+            {
+                faction = value;
+                OnPropertyChanged("Faction");
+            }
+        }
 
         /// <summary>
         /// This is a reference back to the currently selected UnitName from the list
@@ -237,8 +267,10 @@ namespace SUEditor.ViewModel
             InfAtt = tempy.InfAttack.Value;
             VehAtt = tempy.ArmorAttack.Value;
             SightRange = tempy.Vision.Value;
-            Cost = tempy.Cost.Value;
             AttRange = tempy.AttackRange.Value;
+
+            // Multiply by 1000 so that we're showing the "real", in-game value
+            Cost = tempy.Cost.Value * 1000;
 
             // New additions!
             Fuel = tempy.GasTank.Value;
@@ -248,6 +280,11 @@ namespace SUEditor.ViewModel
             IsSingleUse = tempy.IsSingleUse;
             IsNotKept = tempy.IsNotKept;
             CanBuy = tempy.CanBuyFlag;
+
+            // Final additions!
+            MoveType = tempy.MoveCat;
+            ArmorType = tempy.UnitCat;
+            Faction = tempy.Faction;
 
             // Subscribe new UnitName
             PropertyChanged += curUnitName.OnNameChange;

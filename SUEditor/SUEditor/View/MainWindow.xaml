@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:SUEditor"
         xmlns:vm="clr-namespace:SUEditor.ViewModel"
         xmlns:v="clr-namespace:SUEditor.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:types="clr-namespace:SUEditor.Types"
         mc:Ignorable="d"
         Title="MainWindow" Height="528" Width="672">
     <Window.Resources>
@@ -25,6 +27,12 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <ObjectDataProvider x:Key="FactEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="types:UnitFaction" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </Window.Resources>
     <Grid>
         <!-- Menu bar -->
@@ -41,6 +49,7 @@
             <TabItem x:Name="UnitEditor_tab" Header="Unit Editor">
                 <Grid DataContext="{Binding UnitEditor}">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
@@ -79,9 +88,16 @@
 
                     <Label x:Name="Cost_lbl" Content="Cost" Height="30" HorizontalContentAlignment="Center" 
                            Grid.Row="1" Grid.Column="0"/>
-                    <TextBox x:Name="Cost_txt" Text="{Binding Cost, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
-                             Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
-                             Grid.Row="1" Grid.Column="1">
+                    <TextBox x:Name="Cost_txt" Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
+                             Grid.Row="1" Grid.Column="1"
+                             Validation.ErrorTemplate="{StaticResource ValidErr}" Style="{StaticResource ExplainValidErr}">
+                        <TextBox.Text>
+                            <Binding Path="Cost" UpdateSourceTrigger="LostFocus" Mode="TwoWay" StringFormat="{}{0:0,0}">
+                                <Binding.ValidationRules>
+                                    <v:ValidateNumerics Min="0" Multi="1000"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
                     </TextBox>
                     <Label x:Name="Health_lbl" Content="Hit Points" Height="30" HorizontalContentAlignment="Center" 
                            Grid.Row="1" Grid.Column="2"/>
@@ -152,6 +168,43 @@
                             Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2"/>
                     <CheckBox x:Name="IsNotKept_chkbox" IsChecked="{Binding IsNotKept, Mode=TwoWay}" HorizontalAlignment="Right" 
                               Margin="10" Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" />
+
+                    <Label x:Name="MoveType_lbl" Content="Movement Type" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="6" Grid.Column="0"/>
+                    <ComboBox Name="Move_box" IsReadOnly="True" SelectionChanged="MoveBox_SelectionChanged"
+                              Margin="10" Grid.Row="6" Grid.Column="1">
+                        <ComboBoxItem Content="Foot"/>
+                        <ComboBoxItem Content="Wheel"/>
+                        <ComboBoxItem Content="Tread"/>
+                        <ComboBoxItem Content="Towed"/>
+                        <ComboBoxItem Content="Airplane"/>
+                        <ComboBoxItem Content="Helicopter"/>
+                        <ComboBoxItem Content="Dummy"/>
+                    </ComboBox>
+                    <Label x:Name="ArmType_lbl" Content="Armor Type" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="6" Grid.Column="2"/>
+                    <ComboBox Name="ArmType_box" IsReadOnly="True" SelectionChanged="ArmTypeBox_SelectionChanged"
+                              Margin="10" Grid.Row="6" Grid.Column="3">
+                        <ComboBoxItem Content="Air"/>
+                        <ComboBoxItem Content="Vehicle"/>
+                        <ComboBoxItem Content="Infantry"/>
+                    </ComboBox>
+
+
+                    <Label x:Name="Faction_lbl" Content="Belongs to faction:" Height="30" HorizontalContentAlignment="Left"
+                            Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="Fact_box" IsReadOnly="True" SelectionChanged="FactBox_SelectionChanged"
+                              Margin="10" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2">
+                        <ComboBoxItem Content="New England Alliance"/>
+                        <ComboBoxItem Content="The Confederacy"/>
+                        <ComboBoxItem Content="Great Plains Federation"/>
+                        <ComboBoxItem Content="Republic of Texas"/>
+                        <ComboBoxItem Content="California"/>
+                        <ComboBoxItem Content="Pacifica"/>
+                        <ComboBoxItem Content="EU"/>
+                        <ComboBoxItem Content="Russia"/>
+                        <ComboBoxItem Content="All US Factions"/>
+                    </ComboBox>
                 </Grid>
                 
             </TabItem>

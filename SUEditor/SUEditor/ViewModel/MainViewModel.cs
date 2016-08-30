@@ -67,6 +67,9 @@ namespace SUEditor.ViewModel
                 {
                     UnitEditor.NameList.Add(new UnitName(node.TheUnit, node.Index));
                 }
+
+                // Finally, set UnitEditor to the first unit in the list
+                UnitEditor.changeSelection(UnitEditor.NameList[0]);
             }
             catch (SUE_InvalidFileException ivfe)
             {
@@ -159,7 +162,8 @@ namespace SUEditor.ViewModel
                     tempUE.CurUnitName.ViewName = tempUE.DispName;
                     break;
                 case "Cost":
-                    tempUE.CurUnitName.TheUnit.Cost.Value = tempUE.Cost;
+                    // Divide by 1,000 to get the appropriate, data-file value
+                    tempUE.CurUnitName.TheUnit.Cost.Value = tempUE.Cost/1000;
                     break;
                 case "Movement":
                     tempUE.CurUnitName.TheUnit.Speed.Value = tempUE.Movement;
@@ -202,6 +206,15 @@ namespace SUEditor.ViewModel
                     break;
                 case "CanBuy":
                     tempUE.CurUnitName.TheUnit.CanBuyFlag = tempUE.CanBuy;
+                    break;
+                case "MoveType":
+                    tempUE.CurUnitName.TheUnit.MoveCat = tempUE.MoveType;
+                    break;
+                case "ArmorType":
+                    tempUE.CurUnitName.TheUnit.UnitCat = tempUE.ArmorType;
+                    break;
+                case "Faction":
+                    tempUE.CurUnitName.TheUnit.Faction = tempUE.Faction;
                     break;
             }
         }
