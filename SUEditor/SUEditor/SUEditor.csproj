@@ -73,6 +73,7 @@
     <Compile Include="Model\UnitFile.cs" />
     <Compile Include="Model\UnitFileNode.cs" />
     <Compile Include="ViewModel\UnitEditorVM.cs" />
+    <Compile Include="ViewModel\VMEnums.cs" />
     <Compile Include="View\ValidateDisplayName.cs" />
     <Compile Include="View\ValidateNumerics.cs" />
     <Page Include="View\AddUnitWindow.xaml">

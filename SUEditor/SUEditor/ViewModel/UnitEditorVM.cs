@@ -36,7 +36,7 @@ namespace SUEditor.ViewModel
         private bool canBuy;
         private UnitMovementClass moveType;
         private UnitArmorClass armorType;
-        private UnitFaction faction;
+        private VMFact faction;
 
 
         // Properties
@@ -209,12 +209,25 @@ namespace SUEditor.ViewModel
                 OnPropertyChanged("ArmorType");
             }
         }
-        public UnitFaction Faction
+        public VMFact Faction
         {
             get { return faction; }
             set
             {
                 faction = value;
+                OnPropertyChanged("Faction");
+            }
+        }
+        public UnitFaction UFaction
+        {
+            get
+            {
+                return ((faction != VMFact.USA) ? (UnitFaction)((int)faction) : UnitFaction.USA);
+            }
+
+            set
+            {
+                faction = ((value != UnitFaction.USA) ? (VMFact)((int)value) : VMFact.USA);
                 OnPropertyChanged("Faction");
             }
         }
@@ -225,6 +238,11 @@ namespace SUEditor.ViewModel
         public UnitName CurUnitName
         {
             get { return curUnitName; }
+            private set
+            {
+                curUnitName = value;
+                OnPropertyChanged("CurUnitName");
+            }
         }
         /// <summary>
         /// Is true iff properties are being loaded due to a ChangedSelection event
@@ -258,7 +276,7 @@ namespace SUEditor.ViewModel
             }
 
             // And slap all the values where they belong
-            curUnitName = uName;
+            CurUnitName = uName;
             DispName = tempy.DisplayName.Value;
             Health = tempy.HitPoints.Value;
             Def = tempy.Defense.Value;
@@ -284,13 +302,26 @@ namespace SUEditor.ViewModel
             // Final additions!
             MoveType = tempy.MoveCat;
             ArmorType = tempy.UnitCat;
-            Faction = tempy.Faction;
+
+            // We have to convert UnitFaction to VMFact
+            UFaction = tempy.Faction;
 
             // Subscribe new UnitName
             PropertyChanged += curUnitName.OnNameChange;
 
             // Ok, we can respond to events normally
             IsInitialLoad = false;
+        }
+
+        // Helpers
+        private VMFact FromUnitFact(UnitFaction f)
+        {
+            if (f != UnitFaction.USA)
+            {
+                return (VMFact)((int)f);
+            }
+
+            return VMFact.USA;
         }
 
         // INotifyPropertyChanged implmentation

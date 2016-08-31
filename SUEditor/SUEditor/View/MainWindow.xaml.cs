@@ -268,7 +268,7 @@ namespace SUEditor
             MainVM.UnitEditor.changeSelection(UnitBox.SelectedItem as UnitName);
             Move_box.SelectedIndex = (int)MainVM.UnitEditor.MoveType;
             ArmType_box.SelectedIndex = (int)MainVM.UnitEditor.ArmorType;
-            Fact_box.SelectedIndex = (MainVM.UnitEditor.Faction == Types.UnitFaction.USA) ? 8 : (int)MainVM.UnitEditor.Faction;
+            //Fact_box.SelectedIndex = (MainVM.UnitEditor.Faction == Types.UnitFaction.USA) ? 8 : (int)MainVM.UnitEditor.Faction;
         }
 
         private void MoveBox_SelectionChanged(object sender, SelectionChangedEventArgs args)
@@ -282,19 +282,6 @@ namespace SUEditor
 
             int tempInd = Move_box.SelectedIndex;
             MainVM.UnitEditor.MoveType = (Types.UnitMovementClass)tempInd;
-        }
-
-        public void FactBox_SelectionChanged(object sender, SelectionChangedEventArgs args)
-        {
-            // Sanity check
-            if (!MainVM.IsInitialized())
-            {
-                // Do nothing!
-                return;
-            }
-
-            int tempInd = Fact_box.SelectedIndex;
-            MainVM.UnitEditor.Faction = (tempInd == 8) ? Types.UnitFaction.USA : (Types.UnitFaction)tempInd;
         }
 
         public void ArmTypeBox_SelectionChanged(object sender, SelectionChangedEventArgs args)

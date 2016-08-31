@@ -214,7 +214,7 @@ namespace SUEditor.ViewModel
                     tempUE.CurUnitName.TheUnit.UnitCat = tempUE.ArmorType;
                     break;
                 case "Faction":
-                    tempUE.CurUnitName.TheUnit.Faction = tempUE.Faction;
+                    tempUE.CurUnitName.TheUnit.Faction = tempUE.UFaction;
                     break;
             }
         }

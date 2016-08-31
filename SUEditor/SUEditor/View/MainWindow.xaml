@@ -30,7 +30,7 @@
 
         <ObjectDataProvider x:Key="FactEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="types:UnitFaction" />
+                <x:Type TypeName="vm:VMFact" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
@@ -193,17 +193,10 @@
 
                     <Label x:Name="Faction_lbl" Content="Belongs to faction:" Height="30" HorizontalContentAlignment="Left"
                             Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"/>
-                    <ComboBox Name="Fact_box" IsReadOnly="True" SelectionChanged="FactBox_SelectionChanged"
-                              Margin="10" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2">
-                        <ComboBoxItem Content="New England Alliance"/>
-                        <ComboBoxItem Content="The Confederacy"/>
-                        <ComboBoxItem Content="Great Plains Federation"/>
-                        <ComboBoxItem Content="Republic of Texas"/>
-                        <ComboBoxItem Content="California"/>
-                        <ComboBoxItem Content="Pacifica"/>
-                        <ComboBoxItem Content="EU"/>
-                        <ComboBoxItem Content="Russia"/>
-                        <ComboBoxItem Content="All US Factions"/>
+                    <ComboBox Name="Fact_box" IsReadOnly="True"
+                              Margin="10" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2"
+                              ItemsSource="{Binding Source={StaticResource FactEnum}}"
+                              SelectedValue="{Binding Faction, UpdateSourceTrigger=LostFocus, Mode=TwoWay}">
                     </ComboBox>
                 </Grid>
                 
