@@ -21,7 +21,7 @@ namespace SUEditor.View
     /// <summary>
     /// Interaction logic for AddUnitWindow.xaml
     /// </summary>
-    public partial class AddUnitWindow : Window
+    public partial class AddUnitWindow : Window, IDataErrorInfo
     {
         // Properties
         /// <summary>
@@ -31,7 +31,7 @@ namespace SUEditor.View
         /// <summary>
         /// The name for the new unit, defaults to ""
         /// </summary>
-        public NotifyString NewUnitName { get; private set; }
+        public string NewUnitName { get; set; }
         /// <summary>
         /// The index of the unit to be copied, defaults to -1
         /// </summary>
@@ -48,7 +48,7 @@ namespace SUEditor.View
             DataContext = this;
 
             UnitNames = names;
-            NewUnitName = new NotifyString();
+            NewUnitName = "";
             UnitIndex = -1;
 
             // Once everything is set, initialize our components
@@ -64,7 +64,11 @@ namespace SUEditor.View
         // Event handlers
         public void ok_click(object obj, EventArgs args)
         {
-            // Add validation checks later
+            // Don't do anything if [NewUnitName] is not empty
+            if (!string.IsNullOrEmpty(this["NewUnitName"]))
+            {
+                return;
+            }
 
             // Set the properties before we close
             UnitIndex = selection_box.SelectedIndex;
@@ -78,10 +82,48 @@ namespace SUEditor.View
             DialogResult = false;
         }
 
-        public void selection_change(Object obj, EventArgs args)
+        private bool IsNewNameUnique()
         {
-            // Set the value of the textbox to the selection
-            NewUnitName.Val = selection_box.SelectedValue as string;
+            foreach (string temp in UnitNames)
+            {
+                if (temp == NewUnitName)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // IDataErrorInfo implementation
+        public string this[string propName]
+        {
+            get
+            {
+                // We only care about NewUnitName
+                switch (propName)
+                {
+                    case "NewUnitName":
+                        if (!IsNewNameUnique())
+                        {
+                            return "The name of the new unit must be unique.";
+                        }
+                        return "";
+                }
+
+                return "";
+            }
+        }
+
+        public string Error
+        {
+            get
+            {
+                string temp = "";
+                // Add all valid properties to the string
+                temp += this["NewUnitName"];
+
+                return temp;
+            }
         }
     }
 

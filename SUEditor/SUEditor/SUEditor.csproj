@@ -72,6 +72,8 @@
     <Compile Include="Model\Unit.cs" />
     <Compile Include="Model\UnitFile.cs" />
     <Compile Include="Model\UnitFileNode.cs" />
+    <Compile Include="ViewModel\StartingArmy.cs" />
+    <Compile Include="ViewModel\ArmyNode.cs" />
     <Compile Include="ViewModel\UnitEditorVM.cs" />
     <Compile Include="ViewModel\VMEnums.cs" />
     <Compile Include="View\ValidateDisplayName.cs" />

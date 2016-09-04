@@ -163,8 +163,8 @@ namespace SUEditor
             }
 
             // Here, we do final setup of the validation rules
-            DispVal.SetUnitList(MainVM.UnitEditor.NameList);
-            UnitBox.SelectionChanged += DispVal.OnSelectionChange;
+           // DispVal.SetUnitList(MainVM.UnitEditor.NameList);
+           // UnitBox.SelectionChanged += DispVal.OnSelectionChange;
         }
 
         public void SaveClick(object obj, EventArgs e)
@@ -330,14 +330,14 @@ namespace SUEditor
             AddUnitWindow addDlg = new AddUnitWindow(tempNames);
 
             // And don't forget to pass along the ValidationRules!
-            addDlg.NameRules.SetUnitList(MainVM.UnitEditor.NameList);
+            //addDlg.NameRules.SetUnitList(MainVM.UnitEditor.NameList);
 
             bool? addRes = addDlg.ShowDialog();
 
             // Push results if the user hit "Okay"
             if (addRes == true)
             {
-                MainVM.AddUnit(addDlg.UnitIndex, addDlg.NewUnitName.Val);
+                MainVM.AddUnit(addDlg.UnitIndex, addDlg.NewUnitName);
             }
         }
 

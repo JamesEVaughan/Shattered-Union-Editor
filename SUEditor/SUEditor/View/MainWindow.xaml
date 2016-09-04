@@ -28,11 +28,39 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="DataErrorTemp" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <ObjectDataProvider x:Key="FactEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="vm:VMFact" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <DataTemplate DataType="{x:Type vm:ArmyNode}">
+            <Border BorderThickness="1" BorderBrush="Black" Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DispName}" Width="180"/>
+                    <TextBox Text="{Binding NEAStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding ConStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding GPFStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding RoTStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding CalStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding PacStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding EUStartingCount}" Width="30"/>
+                    <TextBox Text="{Binding RusStartingCount}" Width="30"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <CollectionViewSource x:Key="armyStartColl" Source="{Binding Path=MainVM.Armies.StartingArmies}"/>
     </Window.Resources>
     <Grid>
         <!-- Menu bar -->
@@ -45,7 +73,7 @@
         </Menu>
         <!-- Tab Control for the window -->
         <TabControl TabStripPlacement="Top" Margin="10,20,10,10" HorizontalAlignment="Stretch" Grid.RowSpan="6">
-
+            <!-- The UnitEditor Tab -->
             <TabItem x:Name="UnitEditor_tab" Header="Unit Editor">
                 <Grid DataContext="{Binding UnitEditor}">
                     <Grid.RowDefinitions>
@@ -73,12 +101,9 @@
                            Grid.Row="0" Grid.Column="2"/>
                     <TextBox Name="DisplayName_txt" Validation.ErrorTemplate="{StaticResource ValidErr}"
                              HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="30" Margin="10" 
-                             Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource ExplainValidErr}">
+                             Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource DataErrorTemp}">
                         <TextBox.Text>
-                            <Binding Path="DispName" UpdateSourceTrigger="LostFocus" Mode="TwoWay">
-                                <Binding.ValidationRules>
-                                    <v:ValidateDisplayName x:Name="DispVal"/>
-                                </Binding.ValidationRules>
+                            <Binding Path="DispName" UpdateSourceTrigger="LostFocus" Mode="TwoWay" ValidatesOnDataErrors="True">
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
@@ -90,12 +115,10 @@
                            Grid.Row="1" Grid.Column="0"/>
                     <TextBox x:Name="Cost_txt" Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
                              Grid.Row="1" Grid.Column="1"
-                             Validation.ErrorTemplate="{StaticResource ValidErr}" Style="{StaticResource ExplainValidErr}">
+                             Validation.ErrorTemplate="{StaticResource ValidErr}" Style="{StaticResource DataErrorTemp}">
                         <TextBox.Text>
-                            <Binding Path="Cost" UpdateSourceTrigger="LostFocus" Mode="TwoWay" StringFormat="{}{0:0,0}">
-                                <Binding.ValidationRules>
-                                    <v:ValidateNumerics Min="0" Multi="1000"/>
-                                </Binding.ValidationRules>
+                            <Binding Path="Cost" UpdateSourceTrigger="LostFocus" Mode="TwoWay" StringFormat="{}{0:0,0}"
+                                     ValidatesOnDataErrors="True">
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
@@ -127,9 +150,10 @@
 
                     <Label x:Name="Move_lbl" Content="Movement" Height="30" HorizontalContentAlignment="Center"
                            Grid.Row="3" Grid.Column="0"/>
-                    <TextBox x:Name="Move_txt" Text="{Binding Movement, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
+                    <TextBox x:Name="Move_txt" Text="{Binding Movement, UpdateSourceTrigger=LostFocus, Mode=TwoWay, 
+                             ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidErr}"
                              Height="30" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="10" 
-                             Grid.Row="3" Grid.Column="1"/>
+                             Grid.Row="3" Grid.Column="1" Style="{StaticResource DataErrorTemp}"/>
                     <Label x:Name="AttRange_lbl" Content="Attack Range" Height="30" HorizontalContentAlignment="Center" 
                            Grid.Row="3" Grid.Column="2"/>
                     <TextBox x:Name="AttRange_txt" Text="{Binding AttRange, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
@@ -200,6 +224,11 @@
                     </ComboBox>
                 </Grid>
                 
+            </TabItem>
+            
+            <!-- The StartingArmies tab -->
+            <TabItem DataContext="{Binding Armies}" Header="Starting Armies">
+                <ListBox ItemsSource="{Binding StartingArmies}" />
             </TabItem>
         </TabControl>
     </Grid>

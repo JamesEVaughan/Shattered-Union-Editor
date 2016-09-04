@@ -14,7 +14,7 @@ namespace SUEditor.ViewModel
     /// <summary>
     /// This is the ViewModel class for the Unit Editor tab
     /// </summary>
-    public class UnitEditorVM : INotifyPropertyChanged
+    public class UnitEditorVM : INotifyPropertyChanged, IDataErrorInfo
     {
         // Fields
         private UnitName curUnitName;
@@ -324,9 +324,27 @@ namespace SUEditor.ViewModel
             return VMFact.USA;
         }
 
+        private bool IsUniqueName(string name)
+        {
+            foreach (UnitName uName in NameList)
+            {
+                if (name == uName.ViewName && uName != curUnitName)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         // INotifyPropertyChanged implmentation
         protected void OnPropertyChanged(String propName)
         {
+            // Don't propogate events on error
+            if (!String.IsNullOrEmpty(this[propName]))
+            {
+                return;
+            }
             OnPropertyChanged(new PropertyChangedEventArgs(propName));
         }
 
@@ -339,5 +357,54 @@ namespace SUEditor.ViewModel
                 hand(this, args);
             }
         }
+
+        // IDataErrorInfo implementation
+        public string this[string propName]
+        {
+            get
+            {
+                switch (propName)
+                {
+                    case "DispName":
+                        // Check for uniqueness
+                        if (!IsUniqueName(DispName))
+                        {
+                            return "Display Name must be unique.";
+                        }
+                        return "";
+                    case "Cost":
+                        // Make sure it's a multiple of 1000
+                        if ((Cost % 1000) != 0)
+                        {
+                            return "The cost must be in multiples of $1,000";
+                        }
+                        return "";
+                    case "Movement":
+                        // If it's a stationary unit ("Dummy"), then Movement must be zero
+                        if (MoveType == UnitMovementClass.Dummy && Movement != 00)
+                        {
+                            return "Units of Movement Type \"Dummy\" must have a Movement value of 0.";
+                        }
+                        // If it's an airplane ("Planr"), the Movement must be 0xFE
+                        else if (MoveType == UnitMovementClass.Planr && Movement != 999)
+                        {
+                            return "Units of Movement Type \"Airplane\" must have a Movement value of 999";
+                        }
+                        return "";
+                }
+
+                // If we fall out of the switch, just return nothing
+                return "";
+            }
+        }
+
+        public string Error
+        {
+            get
+            {
+                // For now, just return the empty string
+                return "";
+            }
+        } 
     }
 }

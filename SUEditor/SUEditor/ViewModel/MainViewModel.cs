@@ -28,6 +28,8 @@ namespace SUEditor.ViewModel
         /// </summary>
         public UnitEditorVM UnitEditor { get; private set; }
 
+        public StartingArmy Armies { get; private set; }
+
         // Constructors
         /// <summary>
         /// Basic default constructor. Must make separate method calls to initialize the properties
@@ -37,14 +39,16 @@ namespace SUEditor.ViewModel
             // Initialize our properties
             MainUnitFile = null; // UnitFile is initialized in InitMainUnitFile
             UnitEditor = new UnitEditorVM();
+            Armies = new StartingArmy();
 
             // Subscribe to our events
             UnitEditor.PropertyChanged += OnUnitTabChange;
 
             // As this is the entry point of the program, we should handle the some amount of
             // file directory work we need done.
-            System.IO.Directory.CreateDirectory("Backups"); // Sets up a folder for backup files
-            System.IO.Directory.CreateDirectory("Save Files"); // Sets up a folder for saving files
+            //System.IO.Directory.CreateDirectory("Backups"); // Sets up a folder for backup files
+            //System.IO.Directory.CreateDirectory("Save Files"); // Sets up a folder for saving files
+            // NOTE: On second thought, don't. We may not have access priviledges
         }
 
         // Methods
@@ -63,9 +67,15 @@ namespace SUEditor.ViewModel
                 MainUnitFile.init();
 
                 // Now that we've initialized the file, pull out the names for each unit
+                UnitName tempUName;
                 foreach (UnitFileNode node in MainUnitFile.UnitDir.TheUnits)
                 {
-                    UnitEditor.NameList.Add(new UnitName(node.TheUnit, node.Index));
+                    tempUName = new UnitName(node.TheUnit, node.Index);
+                    // Toss it on the NameList..
+                    UnitEditor.NameList.Add(tempUName);
+
+                    // ...and on the Armies
+                    Armies.AddUnit(tempUName);
                 }
 
                 // Finally, set UnitEditor to the first unit in the list
@@ -131,15 +141,21 @@ namespace SUEditor.ViewModel
             tempy = MainUnitFile.UnitDir.TheUnits.Find(x => x.Index == tempInd).TheUnit;
 
             // Now, if everything went right, we should have a new unit in UnitDir
+            UnitName tempUN = new UnitName(tempy, tempInd);
             // Add it to UnitEditorVM
-            UnitEditor.NameList.Add(new UnitName(tempy, tempInd));
+            UnitEditor.NameList.Add(tempUN);
+            // Add it to StartingArmies
+            Armies.AddUnit(tempUN);
         }
 
         // Event delegates
         protected void OnUnitTabChange(object obj, EventArgs args)
         {
-            // If obj isn't a UnitEditorVM...
+            // Let's get some easier to read locals
             UnitEditorVM tempUE = obj as UnitEditorVM;
+            string propChanged = (args as PropertyChangedEventArgs).PropertyName;
+
+            // If obj isn't a UnitEditorVM...
             if (tempUE == null)
             {
                 // ...Don't do anything
@@ -152,8 +168,14 @@ namespace SUEditor.ViewModel
                 return;
             }
 
+            // Lastly, if we have errors on this property...
+            if (!String.IsNullOrEmpty(tempUE[propChanged]))
+            {
+                // Don't update
+                return;
+            }
+
             // This switch handles the bulk of our updating to the model
-            string propChanged = (args as PropertyChangedEventArgs).PropertyName;
             switch (propChanged)
             {
                 case "DispName":

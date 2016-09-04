@@ -14,7 +14,7 @@ namespace SUEditor.ViewModel
     /// UnitName wraps up the name of a unit and implements INotifyPropertyChange. Acts as a node
     /// in an ObserveableCollection.
     /// </summary>
-    public class UnitName : INotifyPropertyChanged
+    public class UnitName : INotifyPropertyChanged, IEquatable<UnitName>
     {
         // Fields
         /// <summary>
@@ -69,24 +69,12 @@ namespace SUEditor.ViewModel
         }
 
         // Methods
-
-        // INotifyPropertyChanged Methods
-        protected void OnPropertyChanged(string propName)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propName));
-        }
-
-        protected void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            PropertyChangedEventHandler hand = PropertyChanged;
-
-            if(hand != null)
-            {
-                hand(this, args);
-            }
-        }
-
-        public void OnNameChange (object obj, PropertyChangedEventArgs args)
+        /// <summary>
+        /// Listener for PropertChanged events
+        /// </summary>
+        /// <param name="obj">The object that fired the event</param>
+        /// <param name="args">The arguments sent from the event</param>
+        public void OnNameChange(object obj, PropertyChangedEventArgs args)
         {
             // First, we need to be dealing with the right stuff
             UnitEditorVM tempUE = obj as UnitEditorVM;
@@ -107,6 +95,45 @@ namespace SUEditor.ViewModel
             {
                 ViewName = tempUE.DispName;
             }
+        }
+
+        // INotifyPropertyChanged Methods
+        protected void OnPropertyChanged(string propName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propName));
+        }
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            PropertyChangedEventHandler hand = PropertyChanged;
+
+            if(hand != null)
+            {
+                hand(this, args);
+            }
+        }
+
+        // Implementation of IEquitable
+        public override bool Equals(object obj)
+        {
+            // Use our equals function if obj is a UnitName
+            UnitName tempUN = obj as UnitName;
+            if (tempUN != null)
+            {
+                return Equals(tempUN);
+            }
+            return base.Equals(obj);
+        }
+
+        public bool Equals(UnitName uName)
+        {
+            return (index == uName.Index) && (viewName == uName.ViewName);
+        }
+
+        public override int GetHashCode()
+        {
+            // We're using ModelName over the view name because it's unlikely to change
+            return unchecked(theUnit.ModelName.GetHashCode() + 7 * (int)index);
         }
     }
 }

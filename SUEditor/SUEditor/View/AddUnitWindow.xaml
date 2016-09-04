@@ -7,6 +7,24 @@
         xmlns:v="clr-namespace:SUEditor.View"
         mc:Ignorable="d"
         Title="AddUnitWindow" Height="250" Width="400">
+    <Window.Resources>
+        <Style x:Key="DataErrorTemp" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate x:Key="ValidErr">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20">!</TextBlock>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*" />
@@ -35,13 +53,11 @@
                Content="Unit Name"/>
 
         <ComboBox x:Name="selection_box" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch" ItemsSource="{Binding UnitNames}" SelectionChanged="selection_change" />
+                  VerticalAlignment="Stretch" ItemsSource="{Binding UnitNames}" />
         <TextBox x:Name="name_txtbox" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-            <Binding Path="NewUnitName.Val" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
-                <Binding.ValidationRules>
-                    <local:ValidateDisplayName x:Name="NameRules"/>
-                </Binding.ValidationRules>
+                  VerticalAlignment="Stretch" Style="{StaticResource DataErrorTemp}" 
+                  Validation.ErrorTemplate="{StaticResource ValidErr}">
+            <Binding Path="NewUnitName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" ValidatesOnDataErrors="True">
             </Binding>
         </TextBox>
 
