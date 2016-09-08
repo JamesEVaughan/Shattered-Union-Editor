@@ -12,6 +12,16 @@ namespace SUEditor.ViewModel
 {
     public class ArmyNode : INotifyPropertyChanged
     {
+        // Constants
+        private const int NEA_INDEX = 0;
+        private const int CON_INDEX = 1;
+        private const int GPF_INDEX = 2;
+        private const int ROT_INDEX = 3;
+        private const int CAL_INDEX = 4;
+        private const int PAC_INDEX = 5;
+        private const int EU_INDEX = 6;
+        private const int RUS_INDEX = 7;
+
         // Fields
         /// <summary>
         /// Field behind DispName property
@@ -42,10 +52,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte NEAStartingCount
         {
-            get { return armyCount[(int)UnitFaction.NEA]; }
+            get { return armyCount[NEA_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.NEA] = value;
+                armyCount[NEA_INDEX] = value;
                 OnPropertyChanged("New England Alliance");
             }
         }
@@ -54,10 +64,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte ConStartingCount
         {
-            get { return armyCount[(int)UnitFaction.Con]; }
+            get { return armyCount[CON_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.Con] = value;
+                armyCount[CON_INDEX] = value;
                 OnPropertyChanged("The Confederacy");
             }
         }
@@ -66,10 +76,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte GPFStartingCount
         {
-            get { return armyCount[(int)UnitFaction.GPF]; }
+            get { return armyCount[GPF_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.GPF] = value;
+                armyCount[GPF_INDEX] = value;
                 OnPropertyChanged("Great Plains Federation");
             }
         }
@@ -78,10 +88,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte RoTStartingCount
         {
-            get { return armyCount[(int)UnitFaction.RoT]; }
+            get { return armyCount[ROT_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.RoT] = value;
+                armyCount[ROT_INDEX] = value;
                 OnPropertyChanged("Republic of Texas");
             }
         }
@@ -90,10 +100,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte CalStartingCount
         {
-            get { return armyCount[(int)UnitFaction.Cal]; }
+            get { return armyCount[CAL_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.Cal] = value;
+                armyCount[CAL_INDEX] = value;
                 OnPropertyChanged("California Commonwealth");
             }
         }
@@ -102,10 +112,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte PacStartingCount
         {
-            get { return armyCount[(int)UnitFaction.Pac]; }
+            get { return armyCount[PAC_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.Pac] = value;
+                armyCount[PAC_INDEX] = value;
                 OnPropertyChanged("Pacifica");
             }
         }
@@ -114,10 +124,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte EUStartingCount
         {
-            get { return armyCount[(int)UnitFaction.EU]; }
+            get { return armyCount[EU_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.EU] = value;
+                armyCount[EU_INDEX] = value;
                 OnPropertyChanged("European Union");
             }
         }
@@ -126,10 +136,10 @@ namespace SUEditor.ViewModel
         /// </summary>
         public byte RusStartingCount
         {
-            get { return armyCount[(int)UnitFaction.Rus]; }
+            get { return armyCount[RUS_INDEX]; }
             set
             {
-                armyCount[(int)UnitFaction.Rus] = value;
+                armyCount[RUS_INDEX] = value;
                 OnPropertyChanged("Russia");
             }
         }
@@ -152,14 +162,14 @@ namespace SUEditor.ViewModel
             dispName = un.DisplayName.Value;
             armyCount = new byte[8];
 
-            armyCount[0] = un.StartsInNEA;
-            armyCount[1] = un.StartsInCon;
-            armyCount[2] = un.StartsInGPF;
-            armyCount[3] = un.StartsInRoT;
-            armyCount[4] = un.StartsInCal;
-            armyCount[5] = un.StartsInPac;
-            armyCount[6] = un.StartsInEU;
-            armyCount[7] = un.StartsInRus;
+            armyCount[NEA_INDEX] = un.StartsInNEA;
+            armyCount[CON_INDEX] = un.StartsInCon;
+            armyCount[GPF_INDEX] = un.StartsInGPF;
+            armyCount[ROT_INDEX] = un.StartsInRoT;
+            armyCount[CAL_INDEX] = un.StartsInCal;
+            armyCount[PAC_INDEX] = un.StartsInPac;
+            armyCount[EU_INDEX] = un.StartsInEU;
+            armyCount[RUS_INDEX] = un.StartsInRus;
 
             theUnit = un;
         }

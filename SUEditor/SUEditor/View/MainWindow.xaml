@@ -47,15 +47,15 @@
         <DataTemplate DataType="{x:Type vm:ArmyNode}">
             <Border BorderThickness="1" BorderBrush="Black" Padding="5">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding DispName}" Width="180"/>
-                    <TextBox Text="{Binding NEAStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding ConStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding GPFStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding RoTStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding CalStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding PacStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding EUStartingCount}" Width="30"/>
-                    <TextBox Text="{Binding RusStartingCount}" Width="30"/>
+                    <Label Grid.Column="0" Content="{Binding DispName}" Width="200"/>
+                    <TextBox Grid.Column="1" Text="{Binding NEAStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="2" Text="{Binding ConStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="3" Text="{Binding GPFStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="4" Text="{Binding RoTStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="5" Text="{Binding CalStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="6" Text="{Binding PacStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="7" Text="{Binding EUStartingCount}" Width="50"/>
+                    <TextBox Grid.Column="8" Text="{Binding RusStartingCount}" Width="50"/>
                 </StackPanel>
             </Border>
         </DataTemplate>
@@ -228,7 +228,79 @@
             
             <!-- The StartingArmies tab -->
             <TabItem DataContext="{Binding Armies}" Header="Starting Armies">
-                <ListBox ItemsSource="{Binding StartingArmies}" />
+                <ListView ItemsSource="{Binding StartingArmies}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding DispName}" Header="Unit Name" 
+                                            Width="200"/>
+                            <GridViewColumn Header="NEA" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding NEAStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                 HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Con" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding ConStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                 HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="GPF" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding GPFStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                             HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="RoT" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding RoTStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                 HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Cal" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding CalStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                 HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Pac" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding PacStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                 HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="EU" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding EUStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                 HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Rus" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox  Text="{Binding RusStartingCount, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" 
+                                                  HorizontalAlignment="Stretch" Width="30" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+
+                </ListView>
             </TabItem>
         </TabControl>
     </Grid>
