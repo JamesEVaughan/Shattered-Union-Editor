@@ -96,7 +96,8 @@
                     </Grid.ColumnDefinitions>
                     <ComboBox Name="UnitBox" ItemsSource="{Binding NameList}" DisplayMemberPath="ViewName"
                               Width="180" IsReadOnly="True" SelectionChanged="UnitBox_SelectionChanged"
-                              IsSynchronizedWithCurrentItem="True" Margin="10" Grid.Row="0" Grid.ColumnSpan="2"/>
+                              IsSynchronizedWithCurrentItem="True" Margin="10" Grid.Row="0" Grid.ColumnSpan="2"
+                              SelectedValue="{Binding CurUnitName, Mode=OneWay}"/>
                     <Label x:Name="DispName_lbl" Content="Display Name" Height="30" HorizontalContentAlignment="Center"
                            Grid.Row="0" Grid.Column="2"/>
                     <TextBox Name="DisplayName_txt" Validation.ErrorTemplate="{StaticResource ValidErr}"
@@ -220,7 +221,7 @@
                     <ComboBox Name="Fact_box" IsReadOnly="True"
                               Margin="10" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2"
                               ItemsSource="{Binding Source={StaticResource FactEnum}}"
-                              SelectedValue="{Binding Faction, UpdateSourceTrigger=LostFocus, Mode=TwoWay}">
+                              SelectedValue="{Binding Faction, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     </ComboBox>
                 </Grid>
                 

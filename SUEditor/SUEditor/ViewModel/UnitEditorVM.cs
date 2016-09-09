@@ -385,10 +385,17 @@ namespace SUEditor.ViewModel
                         {
                             return "Units of Movement Type \"Dummy\" must have a Movement value of 0.";
                         }
-                        // If it's an airplane ("Planr"), the Movement must be 0xFE
+                        // If it's an airplane ("Planr"), the Movement must be 999
                         else if (MoveType == UnitMovementClass.Planr && Movement != 999)
                         {
                             return "Units of Movement Type \"Airplane\" must have a Movement value of 999";
+                        }
+                        return "";
+                    case "Fuel":
+                        // Infantry unit don't need fuel, i.e. flag as 999
+                        if (ArmorType == UnitArmorClass.Infantry && Fuel != 999)
+                        {
+                            return "\"Infantry\" units must have a Fuel value of 999";
                         }
                         return "";
                 }

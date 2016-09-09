@@ -43,6 +43,7 @@ namespace SUEditor.ViewModel
 
             // Subscribe to our events
             UnitEditor.PropertyChanged += OnUnitTabChange;
+            Armies.PropertyChanged += OnArmiesChange;
 
             // As this is the entry point of the program, we should handle the some amount of
             // file directory work we need done.
@@ -181,7 +182,7 @@ namespace SUEditor.ViewModel
                 case "DispName":
                     tempUE.CurUnitName.TheUnit.DisplayName.Value = tempUE.DispName;
                     // Also, propogate changes back to the NameList
-                    tempUE.CurUnitName.ViewName = tempUE.DispName;
+                    //tempUE.CurUnitName.ViewName = tempUE.DispName;
                     break;
                 case "Cost":
                     // Divide by 1,000 to get the appropriate, data-file value
@@ -238,6 +239,45 @@ namespace SUEditor.ViewModel
                 case "Faction":
                     tempUE.CurUnitName.TheUnit.Faction = tempUE.UFaction;
                     break;
+            }
+        }
+
+        protected void OnArmiesChange(object sender, EventArgs args)
+        {
+            // First case, this is a propogated event from StartingArmies
+            if (sender is ArmyNode)
+            {
+                ArmyNode tempAN = sender as ArmyNode;
+                string propChanged = (args as PropertyChangedEventArgs).PropertyName;
+
+                // And now for the switch that'll handle eveything
+                switch (propChanged)
+                {
+                    case "NEAStartingCount":
+                        tempAN.TheUnit.StartsInNEA = tempAN.NEAStartingCount;
+                        break;
+                    case "ConStartingCount":
+                        tempAN.TheUnit.StartsInCon = tempAN.ConStartingCount;
+                        break;
+                    case "GPFStartingCount":
+                        tempAN.TheUnit.StartsInGPF = tempAN.GPFStartingCount;
+                        break;
+                    case "RoTStartingCount":
+                        tempAN.TheUnit.StartsInRoT = tempAN.RoTStartingCount;
+                        break;
+                    case "CalStartingCount":
+                        tempAN.TheUnit.StartsInCal = tempAN.CalStartingCount;
+                        break;
+                    case "PacStartingCount":
+                        tempAN.TheUnit.StartsInPac = tempAN.PacStartingCount;
+                        break;
+                    case "EUStartingCount":
+                        tempAN.TheUnit.StartsInEU = tempAN.EUStartingCount;
+                        break;
+                    case "RusStartingCount":
+                        tempAN.TheUnit.StartsInRus = tempAN.RusStartingCount;
+                        break;
+                }
             }
         }
 

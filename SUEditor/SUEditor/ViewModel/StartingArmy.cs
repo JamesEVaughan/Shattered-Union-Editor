@@ -10,7 +10,7 @@ using SUEditor.Model;
 
 namespace SUEditor.ViewModel
 {
-    public class StartingArmy
+    public class StartingArmy : INotifyPropertyChanged
     {
         // Fields
         private ObservableCollection<ArmyNode> startingArmies;
@@ -45,6 +45,43 @@ namespace SUEditor.ViewModel
 
             // Listen to changes in the Display Name
             uName.PropertyChanged += tempANode.OnNameChange;
+
+            // Listen to changes in the ArmyNode
+            tempANode.PropertyChanged += OnArmyNodeChanged;
         }
+
+
+        #region INotifyPropertyChanged
+        /// <summary>
+        /// The event handler for PropertyChanged events, includes updates to StartingArmies
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Our listener for changes to an ArmyNode inside StartingArmies
+        /// </summary>
+        /// <param name="sender">The ArmyNode that fired a PropertyChanged event</param>
+        /// <param name="args">The property that was changed</param>
+        protected void OnArmyNodeChanged(object sender, PropertyChangedEventArgs args)
+        {
+            // First, set up some ease of use handlers
+            ArmyNode tempAN = sender as ArmyNode; 
+            
+            if (tempAN == null)
+            {
+                // We don't care
+                return;
+            }
+
+            // We actually don't care about this event, but want subsribers of our PropertyChanged
+            // to be able to listen for changes in StartingArmies
+            if (PropertyChanged != null)
+            {
+                // Bubble up
+                PropertyChanged(tempAN, args);
+            }
+        }
+
+        #endregion
     }
 }

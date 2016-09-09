@@ -56,7 +56,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[NEA_INDEX] = value;
-                OnPropertyChanged("New England Alliance");
+                OnPropertyChanged("NEAStartingCount");
             }
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[CON_INDEX] = value;
-                OnPropertyChanged("The Confederacy");
+                OnPropertyChanged("ConStartingCount");
             }
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[GPF_INDEX] = value;
-                OnPropertyChanged("Great Plains Federation");
+                OnPropertyChanged("GPFStartingCount");
             }
         }
         /// <summary>
@@ -92,7 +92,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[ROT_INDEX] = value;
-                OnPropertyChanged("Republic of Texas");
+                OnPropertyChanged("RoTStartingCount");
             }
         }
         /// <summary>
@@ -104,7 +104,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[CAL_INDEX] = value;
-                OnPropertyChanged("California Commonwealth");
+                OnPropertyChanged("CalStartingCount");
             }
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[PAC_INDEX] = value;
-                OnPropertyChanged("Pacifica");
+                OnPropertyChanged("PacStartingCount");
             }
         }
         /// <summary>
@@ -128,7 +128,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[EU_INDEX] = value;
-                OnPropertyChanged("European Union");
+                OnPropertyChanged("EUStartingCount");
             }
         }
         /// <summary>
@@ -140,7 +140,7 @@ namespace SUEditor.ViewModel
             set
             {
                 armyCount[RUS_INDEX] = value;
-                OnPropertyChanged("Russia");
+                OnPropertyChanged("RusStartingCount");
             }
         }
 
